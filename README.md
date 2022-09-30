@@ -1,1 +1,1 @@
-# CS178A-project
+# CS178A Project
