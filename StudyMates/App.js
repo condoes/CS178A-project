@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { ViewPropTypes } from "deprecated-react-native-prop-types";
 import { Button, View, Text, StyleSheet } from "react-native";
 import Routes from "./routes/Routes";
+import { AppRegistry } from 'react-native';
 
 const App = () => {
   return (
@@ -16,15 +17,17 @@ const App = () => {
 
 export default App;
 
-/* <View style={styles.container}>
-        {/* <StatusBar style="auto" /> */
+// AppRegistry.registerComponent('StudyMates', () => App);
 
-// <CountdownCircleTimer
-//   isPlaying
-//   duration={7}
-//   colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-//   colorsTime={[7, 5, 2, 0]}
-// >
-//   {({ remainingTime }) => <Text>{remainingTime}</Text>}
-// </CountdownCircleTimer>
-// </View> */}
+{/* <View style={styles.container}>
+        {<StatusBar style="auto" /> */}
+
+{/* <CountdownCircleTimer
+  isPlaying
+  duration={7}
+  colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+  colorsTime={[7, 5, 2, 0]}
+>
+  {({ remainingTime }) => <Text>{remainingTime}</Text>}
+</CountdownCircleTimer> */}
+// </View>}
