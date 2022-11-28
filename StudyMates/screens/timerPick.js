@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, Pressable } from "react-native";
 import { Timer } from "../Timer";
 
 const TimerPick = () => {
@@ -51,10 +51,12 @@ const TimerPick = () => {
       <Text></Text>
       <Text></Text>
       <Text></Text>
-      <Button
-        // onPress={() => navigation.navigate("Timer")}
-        title="Start!"
-      />
+
+      <Pressable style={styles.button} >
+        <Text style={styles.buttonText}>start</Text> 
+      </Pressable>
+      {/* onPress={() => navigation.navigate("TimerPick")} */}
+
     </View>
   );
 };
@@ -71,10 +73,23 @@ const TimerPick = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFB2B2",
     alignItems: "center",
     justifyContent: "center"
-  }
+  },
+  button: { 
+    backgroundColor: "#D1EBCB",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 24,
+    height: 56,
+    width: 132,
+  },
+  buttonText: {
+    fontFamily: 'WorkSansMedium',
+    fontSize: 24,
+    color: '#4D558A',
+  },
 });
 
 export default TimerPick;
