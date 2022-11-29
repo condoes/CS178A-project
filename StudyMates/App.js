@@ -31,14 +31,14 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      {loadingApp? 
+      {/* {loadingApp? 
         <ImageBackground source={require('./assets/loading.png')} resizeMode="cover" 
         style={styles.image}>
           <Text style={styles.title}>StudyMates!</Text>
         </ImageBackground>
-        :
+        : */}
         <Routes />
-      }
+      {/* } */}
     </View>
   );
 };
