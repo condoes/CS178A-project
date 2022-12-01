@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Button, Pressable, Alert } from "react-native";
-import { Timer } from "../Timer";
 
-const TimerPick = () => {
+const TimerPick = ({ navigation }) => {
   const [pomoTime, setPomo] = useState(30);
   const [shortBreak, setShort] = useState(5);
   const [longBreak, setLong] = useState(15);
@@ -141,8 +140,10 @@ const TimerPick = () => {
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>reset</Text>
         </Pressable>
-
-        <Pressable style={styles.button}>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate("TimerScreen", pomoTime * 60)}
+        >
           <Text style={styles.buttonText}>start</Text>
         </Pressable>
       </View>
