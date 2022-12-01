@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Button, Pressable, Alert } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const TimerPick = ({ navigation }) => {
   const [pomoTime, setPomo] = useState(30);

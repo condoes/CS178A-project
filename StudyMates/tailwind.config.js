@@ -15,6 +15,9 @@ module.exports = {
       fontFamily: {
         fredoka: "FredokaMedium",
         worksans: "WorkSansMedium"
+      },
+      boxShadows: {
+        "3xl": "0 16px 0px rgba(0, 0, 0, 0.25)"
       }
     }
   },

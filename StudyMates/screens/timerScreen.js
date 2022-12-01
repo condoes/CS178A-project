@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { View, Text, StatusBar, StyleSheet, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
-// import { pomoTime } from "./timerPick";
+import { SimpleLineIcons, Ionicons, AntDesign } from "@expo/vector-icons";
 
 const TimerScreen = ({ route, navigation }) => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -13,8 +13,11 @@ const TimerScreen = ({ route, navigation }) => {
         colors={["#E4E5E3", "#FFB2B2", "#C3C3F0"]}
         start={{ x: 0, y: 0 }}
       >
-        <Pressable className="m-16 w-1/2 bg-tan rounded-xl shadow">
-          <Text className="tracking-widest text-darkgray font-fredoka text-2xl text-center p-2 ">
+        <Pressable className="mr-auto mt-10 ml-5">
+          <AntDesign name="back" size={32} color="black" />
+        </Pressable>
+        <Pressable className="mt-8 mb-16 w-2/3 bg-tan rounded-xl shadow">
+          <Text className="tracking-widest text-darkgray font-fredoka text-3xl text-center p-2 ">
             pomodoro
           </Text>
         </Pressable>
@@ -47,14 +50,16 @@ const TimerScreen = ({ route, navigation }) => {
         </CountdownCircleTimer>
         <View className="m-auto flex-row items-center justify-center">
           <Pressable
-            className="mx-6 w-1/3 bg-lightpurple rounded-2xl shadow"
+            className="mx-6 w-1/3 bg-lightpurple rounded-2xl shadow-sm flex-row items-center justify-center"
             onPress={() => setIsPlaying(prevPlaying => !prevPlaying)}
           >
+            <SimpleLineIcons name="control-pause" size={18} color="black" />
             <Text className=" font-worksans text-2xl text-center p-2 justify">
               pause
             </Text>
           </Pressable>
-          <Pressable className="w-1/3 bg-red rounded-2xl shadow">
+          <Pressable className="w-1/3 bg-red rounded-2xl shadow flex-row items-center justify-center">
+            <Ionicons name="stop-outline" size={24} color="black" />
             <Text className="font-worksans text-2xl text-center p-2 justify">
               end
             </Text>
