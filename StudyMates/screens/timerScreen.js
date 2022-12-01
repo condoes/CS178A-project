@@ -13,7 +13,10 @@ const TimerScreen = ({ route, navigation }) => {
         colors={["#E4E5E3", "#FFB2B2", "#C3C3F0"]}
         start={{ x: 0, y: 0 }}
       >
-        <Pressable className="mr-auto mt-10 ml-5">
+        <Pressable
+          className="mr-auto mt-10 ml-5"
+          onPress={() => navigation.navigate("TimerPick")}
+        >
           <AntDesign name="back" size={32} color="black" />
         </Pressable>
         <Pressable className="mt-8 mb-16 w-2/3 bg-tan rounded-xl shadow">
