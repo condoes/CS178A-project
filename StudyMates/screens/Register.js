@@ -2,10 +2,10 @@ import { React, useState } from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../firebase";
-import { FontAwesome } from "@expo/vector-icons";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = () => {
@@ -27,6 +27,13 @@ const Register = ({ navigation }) => {
         <Text className="text-5xl font-fredoka p-2">sign up</Text>
         <TextInput
           className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          placeholder="username"
+          onChangeText={text => setUsername(text)}
+          value={username}
+          maxLength={15}
+        />
+        <TextInput
+          className="mt-2 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="email"
           onChangeText={text => setEmail(text)}
           value={email}
@@ -45,9 +52,6 @@ const Register = ({ navigation }) => {
           onPress={handleSignUp}
         >
           <Text className="text-3xl font-fredoka text-darkgray">sign up</Text>
-        </Pressable>
-        <Pressable className="pt-4">
-          <FontAwesome name="google" size={24} color="black" />
         </Pressable>
       </LinearGradient>
     </View>

@@ -1,11 +1,30 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../firebase";
 
 const Login = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
-  const [[password], setPassword] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    const loggedIn = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.navigate("Landing");
+      }
+    });
+    return loggedIn;
+  }, []);
+
+  const handleLogIn = () => {
+    auth
+      .signInWithEmailAndPassword(email.trim(), password)
+      .then(userCredentials => {
+        const user = userCredentials.user;
+        console.log("logged in with:", user.email);
+      })
+      .catch(error => alert(error.message));
+  };
 
   return (
     <View className="absolute flex items-center justify-center m-auto">
@@ -18,15 +37,22 @@ const Login = ({ route, navigation }) => {
         <TextInput
           className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="email"
+          onChangeText={text => setEmail(text)}
+          value={email}
           autoComplete="email"
         />
         <TextInput
           className="mt-2 mb-4 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="password"
           autoComplete="email"
+          onChangeText={text => setPassword(text)}
+          value={password}
           secureTextEntry
         />
-        <Pressable className="border border-1 p-2 rounded-xl px-4">
+        <Pressable
+          className="border border-1 p-2 rounded-xl px-4"
+          onPress={handleLogIn}
+        >
           <Text className="text-3xl font-fredoka text-darkgray">login</Text>
         </Pressable>
         <Pressable onPress={() => navigation.navigate("Register")}>
