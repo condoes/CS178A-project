@@ -3,9 +3,14 @@ import { View, Text, StyleSheet, Button, Pressable, Alert } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const TimerPick = ({ navigation }) => {
-  const [pomoTime, setPomo] = useState(30);
+  const [pomoTime, setPomo] = useState(25);
   const [shortBreak, setShort] = useState(5);
-  const [longBreak, setLong] = useState(15);
+  const [longBreak, setLong] = useState(10);
+  const reset = () => {
+    setPomo(25);
+    setShort(5);
+    setLong(10);
+  };
   const increment = () => {
     if (shortBreak < pomoTime) {
       // console.log("short break:" + shortBreak);
@@ -19,12 +24,13 @@ const TimerPick = ({ navigation }) => {
   const decrement = props => {
     if (props == pomoTime && props > 15) {
       setPomo(props - 5);
-    } else if (props == shortBreak && props > 5) {
+    }
+    if (props == shortBreak && props > 5) {
       setShort(props - 5);
     }
-    // if (props == longBreak && props > 5) {
-    //   setLong(props - 5);
-    // }
+    if (props == longBreak && props > 5) {
+      setLong(props - 5);
+    }
   };
   return (
     <View style={styles.container}>
@@ -138,7 +144,7 @@ const TimerPick = ({ navigation }) => {
 
       {/* BUTTONS AT THE END */}
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={() => reset()}>
           <Text style={styles.buttonText}>reset</Text>
         </Pressable>
         <Pressable

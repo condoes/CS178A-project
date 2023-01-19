@@ -5,13 +5,25 @@ import Landing from "../screens/landing";
 import TimerPick from "../screens/timerPick";
 import Profile from "../screens/Profile";
 import TimerScreen from "../screens/timerScreen";
+import Login from "../screens/Login";
+import Register from "../screens/Register";
 
 const Stack = createNativeStackNavigator();
 
 function Routes() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Landing"
           component={Landing}
