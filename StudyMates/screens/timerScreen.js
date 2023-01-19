@@ -1,11 +1,13 @@
 import { React, useState } from "react";
-import { View, Text, StatusBar, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { SimpleLineIcons, Ionicons, AntDesign } from "@expo/vector-icons";
 
 const TimerScreen = ({ route, navigation }) => {
   const [isPlaying, setIsPlaying] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View className="flex items-center justify-center">
       <LinearGradient
@@ -50,6 +52,12 @@ const TimerScreen = ({ route, navigation }) => {
               );
             }
           }}
+          {/* if (remainingTime == 0)
+          {
+            <Modal>
+              <Text>hi</Text>
+            </Modal>
+          } */}
         </CountdownCircleTimer>
         <View className="m-auto flex-row items-center justify-center">
           <Pressable

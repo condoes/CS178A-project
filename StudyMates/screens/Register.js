@@ -2,11 +2,21 @@ import { React, useState } from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../firebase";
+import { FontAwesome } from "@expo/vector-icons";
 
-const Login = ({ route, navigation }) => {
+const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [[password], setPassword] = useState("");
+  const [password, setPassword] = useState("");
 
+  const handleSignUp = () => {
+    auth
+      .createUserWithEmailAndPassword(email.trim(), password)
+      .then(userCredentials => {
+        const user = userCredentials.user;
+        console.log(user.email);
+      })
+      .catch(error => alert(error.message));
+  };
   return (
     <View className="absolute flex items-center justify-center m-auto">
       <LinearGradient
@@ -14,27 +24,34 @@ const Login = ({ route, navigation }) => {
         colors={["#E4E5E3", "#FFB2B2", "#C3C3F0"]}
         start={{ x: 0, y: 0 }}
       >
-        <Text className="text-5xl font-fredoka p-2">StudyMates!</Text>
+        <Text className="text-5xl font-fredoka p-2">sign up</Text>
         <TextInput
           className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="email"
+          onChangeText={text => setEmail(text)}
+          value={email}
           autoComplete="email"
         />
         <TextInput
           className="mt-2 mb-4 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="password"
+          onChangeText={text => setPassword(text)}
+          value={password}
           autoComplete="email"
           secureTextEntry
         />
-        <Pressable className="border border-1 p-2 rounded-xl px-4">
-          <Text className="text-3xl font-fredoka text-darkgray">login</Text>
+        <Pressable
+          className="border border-1 p-2 rounded-xl px-4"
+          onPress={handleSignUp}
+        >
+          <Text className="text-3xl font-fredoka text-darkgray">sign up</Text>
         </Pressable>
-        <Pressable onPress={() => navigation.navigate("Register")}>
-          <Text className="pt-6 underline text-2xl font-fredoka">sign up</Text>
+        <Pressable className="pt-4">
+          <FontAwesome name="google" size={24} color="black" />
         </Pressable>
       </LinearGradient>
     </View>
   );
 };
 
-export default Login;
+export default Register;
