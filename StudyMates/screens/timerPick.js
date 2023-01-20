@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button, Pressable, Alert } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { View, Text, StyleSheet, Button, Pressable, Alert, line } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { AntDesign } from "@expo/vector-icons";
 
-const TimerPick = ({ navigation }) => {
-  const [pomoTime, setPomo] = useState(30);
-  const [shortBreak, setShort] = useState(5);
-  const [longBreak, setLong] = useState(15);
+const TimerPick = ({ route, navigation }) => {
+  const [pomoTime, setPomo] = useState(0.3);
+  const [shortBreak, setShort] = useState(0.2);
+  const [longBreak, setLong] = useState(0.4);
   const increment = () => {
     if (shortBreak < pomoTime) {
       // console.log("short break:" + shortBreak);
@@ -27,14 +28,25 @@ const TimerPick = ({ navigation }) => {
     // }
   };
   return (
+    <LinearGradient style={styles.linGrad}
+      colors={["#EDEDED", "#FFDADA", "#FFC3C3", "#B0B0F8"]}
+      start={{ x: 0, y: 0 }}
+      locations={["5.53%", "13.4%", "55.36%", "100%"]}
+    >
+      <Pressable
+        className="mr-auto mt-12 ml-5"
+        onPress={() => navigation.navigate("Landing")}
+      >
+        <AntDesign name="back" size={30} color="black" />
+      </Pressable>
     <View style={styles.container}>
       {/* TIMER SETTINGS TITLE */}
-      <View style={styles.titleBackground}>
+      <View style={[styles.titleBackground, styles.shadowProp]}>
         <Text style={styles.sectionTitle}>timer settings</Text>
       </View>
 
       {/* POMODORO SETTINGS SECTION */}
-      <View style={styles.popUp}>
+      <View style={[styles.popUp, styles.shadowProp]}>
         <View style={styles.timerContainer}>
           <Text style={styles.sectionTitle}>pomodoro:</Text>
 
@@ -143,13 +155,18 @@ const TimerPick = ({ navigation }) => {
         </Pressable>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("TimerScreen", pomoTime * 60)}
+          onPress={() => navigation.navigate("TimerScreen", {
+            starting: 1,
+            pomoT: pomoTime * 60,
+            shortT: shortBreak * 60,
+            longT: longBreak * 60})}
         >
           <Text style={styles.buttonText}>start</Text>
         </Pressable>
       </View>
       {/* onPress={() => navigation.navigate("TimerPick")} */}
     </View>
+    </LinearGradient>
   );
 };
 
@@ -157,9 +174,22 @@ const styles = StyleSheet.create({
   // FULL PAGE STYLING
   container: {
     flex: 1,
-    backgroundColor: "#FFB2B2",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "space-evenly",
+    paddingBottom: 50
+  },
+
+  linGrad: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+
+  shadowProp: {
+    shadowColor: '#00000',
+    shadowOffset: {height: 4},
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
   },
 
   // "timer settings" POP-UP STYLING
@@ -170,7 +200,6 @@ const styles = StyleSheet.create({
     width: 285,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 50
   },
 
   // POP-UP STLYING
@@ -197,7 +226,7 @@ const styles = StyleSheet.create({
     // just the - and + section of the menu options
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
     //backgroundColor: "blue",
   },
   timeTextContainer: {
