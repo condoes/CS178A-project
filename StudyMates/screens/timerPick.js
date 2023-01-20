@@ -3,10 +3,16 @@ import { View, Text, StyleSheet, Button, Pressable, Alert, line } from "react-na
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 
-const TimerPick = ({ route, navigation }) => {
-  const [pomoTime, setPomo] = useState(0.3);
-  const [shortBreak, setShort] = useState(0.2);
-  const [longBreak, setLong] = useState(0.4);
+const TimerPick = ({ navigation }) => {
+  const [pomoTime, setPomo] = useState(25);
+  const [shortBreak, setShort] = useState(5);
+  const [longBreak, setLong] = useState(10);
+  const reset = () => {
+    setPomo(25);
+    setShort(5);
+    setLong(10);
+  };
+
   const increment = () => {
     if (shortBreak < pomoTime) {
       // console.log("short break:" + shortBreak);
@@ -20,12 +26,13 @@ const TimerPick = ({ route, navigation }) => {
   const decrement = props => {
     if (props == pomoTime && props > 15) {
       setPomo(props - 5);
-    } else if (props == shortBreak && props > 5) {
+    }
+    if (props == shortBreak && props > 5) {
       setShort(props - 5);
     }
-    // if (props == longBreak && props > 5) {
-    //   setLong(props - 5);
-    // }
+    if (props == longBreak && props > 5) {
+      setLong(props - 5);
+    }
   };
   return (
     <LinearGradient style={styles.linGrad}
@@ -150,7 +157,7 @@ const TimerPick = ({ route, navigation }) => {
 
       {/* BUTTONS AT THE END */}
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={() => reset()}>
           <Text style={styles.buttonText}>reset</Text>
         </Pressable>
         <Pressable

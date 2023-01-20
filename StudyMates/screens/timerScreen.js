@@ -11,7 +11,6 @@ const TimerScreen = ({ route, navigation }) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [key, setKey] = useState(0);
   const [duration, setTime] = useState(pomoT);
-
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -66,6 +65,12 @@ const TimerScreen = ({ route, navigation }) => {
               );
             }
           }}
+          {/* if (remainingTime == 0)
+          {
+            <Modal>
+              <Text>hi</Text>
+            </Modal>
+          } */}
         </CountdownCircleTimer>
         <View className="m-auto flex-row items-center justify-center">
           <Pressable
