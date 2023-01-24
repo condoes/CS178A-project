@@ -1,19 +1,28 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { collection, getDocs, doc, setDoc } from "firebase/firestore/lite";
 
-const Register = ({ navigation }) => {
+const Register = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     auth
       .createUserWithEmailAndPassword(email.trim(), password)
       .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log(user.email);
+        const user = {
+          username: username
+        };
+
+        db.collection("users")
+          .doc(userCredentials.user.uid)
+          .set(user);
+        const curr_user = userCredentials.user;
+        console.log(curr_user.email);
+        console.log(curr_user.username);
       })
       .catch(error => alert(error.message));
   };
@@ -28,7 +37,7 @@ const Register = ({ navigation }) => {
         <TextInput
           className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="username"
-          onChangeText={text => setUsername(text)}
+          onChangeText={e => setUsername(e.target.value)}
           value={username}
           maxLength={15}
         />
