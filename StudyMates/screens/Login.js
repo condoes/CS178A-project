@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 const Login = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // const username = route.params;
 
   useEffect(() => {
     const loggedIn = auth.onAuthStateChanged(user => {
@@ -21,7 +22,8 @@ const Login = ({ route, navigation }) => {
       .signInWithEmailAndPassword(email.trim(), password)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log("logged in with:", user.email);
+        // console.log("logged in with:", user.email);
+        // console.log("username: ", user.username);
       })
       .catch(error => alert(error.message));
   };
