@@ -7,6 +7,7 @@ import { collection, getDocs, doc, setDoc } from "firebase/firestore/lite";
 const Register = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = async () => {
@@ -14,7 +15,10 @@ const Register = ({ route, navigation }) => {
       .createUserWithEmailAndPassword(email.trim(), password)
       .then(userCredentials => {
         const user = {
-          username: username
+          username: username,
+          email: email,
+          coins: 0,
+          totalStudy: 0
         };
 
         db.collection("users")
@@ -35,21 +39,21 @@ const Register = ({ route, navigation }) => {
       >
         <Text className="text-5xl font-fredoka p-2">sign up</Text>
         <TextInput
-          className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-3/5 bg-tan/25"
           placeholder="username"
-          onChangeText={e => setUsername(e.target.value)}
+          onChangeText={text => setUsername(text)}
           value={username}
           maxLength={15}
         />
         <TextInput
-          className="mt-2 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          className="mt-2 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-3/5 bg-tan/25"
           placeholder="email"
           onChangeText={text => setEmail(text)}
           value={email}
-          autoComplete="email"
+          textContentType="emailAddress"
         />
         <TextInput
-          className="mt-2 mb-4 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          className="mt-2 mb-4 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-3/5 bg-tan/25"
           placeholder="password"
           onChangeText={text => setPassword(text)}
           value={password}
