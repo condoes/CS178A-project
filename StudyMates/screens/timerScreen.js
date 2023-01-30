@@ -48,7 +48,7 @@ const TimerScreen = ({ route, navigation }) => {
             const seconds = remainingTime % 60;
             if ((minutes == 0) && (seconds == 0)) {
               return (
-                setModalVisible(true)
+                setModalVisible(true) 
               );
             } else 
             if (seconds < 10) {
@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     backgroundColor: "rgba(0, 0, 250, 0.2)",
   },
   modalView: {

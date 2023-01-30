@@ -6,10 +6,11 @@ import {
   Pressable,
   Image,
   ImageBackground,
-  useContext
+  useContext,
+  Button
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import customButton from "../customButton";
+import BurgerMenu from "../Components/burgerMenu";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import Routes from "../routes/Routes";
 // import { collection, doc, setDoc } from "firebase/firestore";
@@ -40,6 +41,8 @@ const Landing = ({ navigation }) => {
       start={{ x: 0, y: 0 }}
       locations={["0.77%", "37.93%", "60.5%", "65.94%", "96.15%"]}
     >
+      <BurgerMenu navigation={navigation}/>
+
       <Text className="text-4xl font-fredoka text-white">
         Welcome, {user && user.username}
       </Text>
@@ -47,7 +50,7 @@ const Landing = ({ navigation }) => {
       </ImageBackground> */}
 
       {/* https://reactnative.dev/docs/images */}
-      {/* <Image source={require('../assets/greenHyena2.png')} /> */}
+      <Image source={require('../assets/greenHyena2.png')} />
 
       {/* <ImageBackground source={require('../assets/calloutBubble.png')} 
         style={styles.image}>
