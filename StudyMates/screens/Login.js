@@ -11,7 +11,7 @@ const Login = ({ route, navigation }) => {
   useEffect(() => {
     const loggedIn = auth.onAuthStateChanged(user => {
       if (user) {
-        navigation.navigate("Landing");
+        navigation.navigate("PickPet");
       }
     });
     return loggedIn;
