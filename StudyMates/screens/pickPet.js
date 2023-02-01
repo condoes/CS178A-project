@@ -1,8 +1,14 @@
 import { React, useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-const PickPet = () => {
+const PickPet = ({ navigation }) => {
   return (
     <LinearGradient
       className="h-screen w-screen items-center justify-center flex"
@@ -22,18 +28,49 @@ const PickPet = () => {
           </Text>
         </View>
         <View className="h-5/6 w-full py-4">
-          <Image
-            style={styles.image}
-            source={require("../assets/pinkFox.png")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../assets/redTiger.png")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../assets/greenHyena2.png")}
-          />
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate("ConfirmPet", {
+                name: "Miss Feneca, the Fox",
+                img: require("../assets/pinkFox.png")
+              })
+            }
+          >
+            <Image
+              style={styles.image}
+              source={require("../assets/pinkFox.png")}
+            />
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate("ConfirmPet", {
+                name: "Sir Tyrion, the Tiger",
+                img: require("../assets/redTiger.png")
+              })
+            }
+          >
+            <Image
+              style={styles.image}
+              source={require("../assets/redTiger.png")}
+              onPress={() => navigation.navigate("ConfirmPet")}
+            />
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate("ConfirmPet", {
+                name: "H, the Hyena",
+                img: require("../assets/greenHyena2.png")
+              })
+            }
+          >
+            <Image
+              style={styles.image}
+              source={require("../assets/greenHyena2.png")}
+              onPress={() => navigation.navigate("ConfirmPet")}
+            />
+          </TouchableWithoutFeedback>
         </View>
       </View>
     </LinearGradient>

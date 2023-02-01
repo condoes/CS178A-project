@@ -11,7 +11,8 @@ module.exports = {
         lightpurple: "#E6E0FF",
         tan: "#FFF2D4",
         red: "#FF9F9F",
-        darkgray: "#505050"
+        darkgray: "#505050",
+        green: "#D1EBCB"
       },
       fontFamily: {
         fredoka: "FredokaMedium",
