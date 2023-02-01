@@ -23,7 +23,7 @@ const BurgerMenu = ({ navigation }) => {
           <Pressable
             style={({ pressed }) => [styles.menuItem]}
             onPress={() => {
-              navigation.navigate("TimerPick");
+              navigation.navigate("Store");
               setMenu(!openMenu);
             }}
           >

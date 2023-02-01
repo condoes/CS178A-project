@@ -7,6 +7,7 @@ import Profile from "../screens/Profile";
 import TimerScreen from "../screens/timerScreen";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
+import Store from "../screens/Store";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,11 @@ function Routes() {
         <Stack.Screen
           name="TimerScreen"
           component={TimerScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Store"
+          component={Store}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Profile" component={Profile} />
