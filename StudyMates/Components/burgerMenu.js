@@ -3,57 +3,53 @@ import { View, Pressable, StyleSheet } from "react-native";
 import { MaterialCommunityIcons, Entypo, Ionicons } from "@expo/vector-icons";
 
 const BurgerMenu = ({ navigation }) => {
-  const [openMenu, setMenu] = useState(false);
+    const [openMenu, setMenu] = useState(false);
 
-  return(
-      <View>
-      {openMenu ? 
-          <View style={[styles.dropDownCont, styles.shadowProp]}>
-              <Pressable style={({pressed}) => [styles.menuCont, {backgroundColor: pressed? "#9A9AEC" : "#9F9FDC"}]} 
-              onPress={()=>setMenu(!openMenu)}>
-                  <Entypo name="menu" size={45} color="#505050"/>
-              </Pressable>
+    return(
+        <View>
+        {openMenu ? 
+            <View style={[styles.dropDownCont, styles.shadowProp]}>
+                <Pressable style={({pressed}) => [styles.menuCont, {backgroundColor: pressed? "#9A9AEC" : "#9F9FDC"}]} 
+                onPress={()=>setMenu(!openMenu)}>
+                    <Entypo name="menu" size={45} color="#505050"/>
+                </Pressable>
 
-              <Pressable
-              style={({pressed}) => [styles.menuItem]}
-              onPress={() => {navigation.navigate("TimerPick"); setMenu(!openMenu);}}>
-                  <Ionicons name="bar-chart-outline" size={35} color="#505050"/>
-              </Pressable>
+                <Pressable
+                style={({pressed}) => [styles.menuItem]}
+                onPress={() => {navigation.navigate("TimerPick"); setMenu(!openMenu);}}>
+                    <Ionicons name="bar-chart-outline" size={35} color="#505050"/>
+                </Pressable>
 
-              <Pressable
+                <Pressable
                 style={({ pressed }) => [styles.menuItem]}
                 onPress={() => {
-                  navigation.navigate("TimerPick");
-                  setMenu(!openMenu);
-                }}
-              >
-                <Ionicons name="person-circle-outline" size={35} color="#505050" />
-              </Pressable>
+                navigation.navigate("TimerPick");
+                setMenu(!openMenu);
+                }}>
+                    <Ionicons name="person-circle-outline" size={35} color="#505050" />
+                </Pressable>
 
-              <Pressable
+                <Pressable
                 style={({ pressed }) => [styles.menuItem]}
                 onPress={() => {
-                  navigation.navigate("TimerPick");
-                  setMenu(!openMenu);
-                }}
-              >
-                <Ionicons name="settings-outline" size={35} color="#505050" />
-              </Pressable>
+                navigation.navigate("TimerPick");
+                setMenu(!openMenu);
+                }}>
+                    <Ionicons name="settings-outline" size={35} color="#505050" />
+                </Pressable>
             </View>
-          ) : (
+            :
             <Pressable
-              style={({ pressed }) => [
-                styles.menuCont,
-                styles.shadowProp,
+            style={({ pressed }) => [styles.menuCont, styles.shadowProp,
                 { backgroundColor: pressed ? "#9A9AEC" : "#9F9FDC" }
-              ]}
-              onPress={() => setMenu(!openMenu)}
+            ]}
+            onPress={() => setMenu(!openMenu)}
             >
-              <Entypo name="menu" size={45} color="#505050" />
+                <Entypo name="menu" size={45} color="#505050" />
             </Pressable>
-          )}
+            }
         </View>
-  );
+    );
 };
 
 const styles = StyleSheet.create({
