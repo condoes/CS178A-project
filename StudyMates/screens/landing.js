@@ -79,7 +79,9 @@ const Landing = ({ navigation }) => {
           <Text style={styles.buttonText}>study</Text>
         </Pressable>
 
-        <Pressable style={[styles.roundButton, styles.shadowProp]}>
+        <Pressable 
+        style={[styles.roundButton, styles.shadowProp]}
+        onPress={() => navigation.navigate("Store")}>
           <MaterialCommunityIcons name="storefront-outline" size={30} color="black" />
         </Pressable>
       </View>
