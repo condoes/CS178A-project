@@ -41,7 +41,7 @@ const NamePet = ({ route, navigation }) => {
           />
           <Pressable
             style={[styles.confirmButton, styles.shadowProp]}
-            onPress={() => navigation.navigate("Landing")}
+            onPress={() => navigation.navigate("Landing", { img: img })}
           >
             <Text className="font-fredoka text-3xl">confirm</Text>
           </Pressable>

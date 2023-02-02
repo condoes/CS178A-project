@@ -16,8 +16,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import { collection, doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
 
-const Landing = ({ navigation }) => {
+const Landing = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
+  const { img } = route.params;
 
   const getUser = async () => {
     const { uid } = auth.currentUser;
@@ -41,7 +42,7 @@ const Landing = ({ navigation }) => {
       start={{ x: 0, y: 0 }}
       locations={["0.77%", "37.93%", "60.5%", "65.94%", "96.15%"]}
     >
-      <BurgerMenu navigation={navigation}/>
+      <BurgerMenu navigation={navigation} />
 
       <Text className="text-4xl font-fredoka text-white">
         Welcome, {user && user.username}
@@ -50,7 +51,7 @@ const Landing = ({ navigation }) => {
       </ImageBackground> */}
 
       {/* https://reactnative.dev/docs/images */}
-      <Image source={require('../assets/greenHyena2.png')} />
+      <Image source={img} />
 
       {/* <ImageBackground source={require('../assets/calloutBubble.png')} 
         style={styles.image}>
