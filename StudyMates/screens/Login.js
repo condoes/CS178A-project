@@ -1,17 +1,34 @@
 import { React, useState, useEffect } from "react";
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable, TextInput, AsyncStorage } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 
 const Login = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const username = route.params;
 
+  const handleScreen = async () => {
+    const { uid } = auth.currentUser;
+    const userRef = db.collection("users").doc(uid);
+    const doc = await userRef.get();
+    const userData = doc.data();
+    console.log("user pet id:", userData.petid);
+
+    if (userData.petid === "") {
+      navigation.navigate("PickPet");
+    } else {
+      navigation.navigate("Landing");
+    }
+  };
+
   useEffect(() => {
     const loggedIn = auth.onAuthStateChanged(user => {
+      // const { uid } = auth.currentUser;
+      // console.log(user.petid);
       if (user) {
-        navigation.navigate("PickPet");
+        // navigation.navigate("Landing");
+        handleScreen();
       }
     });
     return loggedIn;

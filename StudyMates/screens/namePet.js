@@ -10,22 +10,34 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
 import { auth, db } from "../firebase";
+// import { DocumentReference } from "@firebase/firestore-types";
 
 const NamePet = ({ route, navigation }) => {
-  const { name, img } = route.params;
+  const { name, img, type } = route.params;
   //   console.log("img:", img);
   const [newName, setNewName] = useState(name);
   //   console.log("name:", name);
   //   console.log("new name:", newName);
+
   const handlePetLog = () => {
     const { uid } = auth.currentUser;
     const pet = {
       name: newName,
       exp: 0,
       level: 1,
-      user: uid
+      userid: uid,
+      type: type
     };
-    db.collection("pets").add(pet);
+    db.collection("pets")
+      .add(pet)
+      .then(documentReference => {
+        const petid = documentReference.id;
+        console.log("added pet with id: ", petid);
+        db.collection("users")
+          .doc(uid)
+          .update({ petid: petid });
+      });
+
     navigation.navigate("Landing", { img: img });
   };
 

@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 const ConfirmPet = ({ route, navigation }) => {
-  const { name, img } = route.params;
+  const { name, img, type } = route.params;
   //   console.log("image:", img);
 
   return (
@@ -31,7 +31,11 @@ const ConfirmPet = ({ route, navigation }) => {
           <Pressable
             style={[styles.yesButton, styles.shadowProp]}
             onPress={() =>
-              navigation.navigate("NamePet", { name: name, img: img })
+              navigation.navigate("NamePet", {
+                name: name,
+                img: img,
+                type: type
+              })
             }
           >
             <Text className="p-4 font-fredoka text-3xl">yes</Text>

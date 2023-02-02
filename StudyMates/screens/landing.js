@@ -18,7 +18,7 @@ import { db, auth } from "../firebase";
 
 const Landing = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
-  const { img } = route.params;
+  const [img, setImg] = useState(null);
 
   const getUser = async () => {
     const { uid } = auth.currentUser;
@@ -27,13 +27,29 @@ const Landing = ({ route, navigation }) => {
     const userRef = db.collection("users").doc(uid);
     const doc = await userRef.get();
     const userData = doc.data();
-    // console.log(userData);
     setUser(userData);
+    // console.log(userData);
+
+    const petid = userData.petid;
+    // console.log("user pet id:", petid);
+
+    const petRef = db.collection("pets").doc(petid);
+
+    const petDoc = await petRef.get();
+    const petData = petDoc.data();
+
+    // console.log("pet type", petData.type);
+    petData.type === "fox"
+      ? setImg(require("../assets/pinkFox.png"))
+      : petData.type === "tiger"
+      ? setImg(require("../assets/redTiger.png"))
+      : setImg(require("../assets/greenHyena2.png"));
   };
 
   useEffect(() => {
     getUser();
-  }, []);
+    // imgCheck();
+  }, [user]);
 
   return (
     <LinearGradient
@@ -43,28 +59,23 @@ const Landing = ({ route, navigation }) => {
       locations={["0.77%", "37.93%", "60.5%", "65.94%", "96.15%"]}
     >
       <BurgerMenu navigation={navigation} />
-
       <Text className="text-4xl font-fredoka text-white">
         Welcome, {user && user.username}
       </Text>
       {/* <ImageBackground source={require('../assets/callout.png')} resizeMode="cover" style={styles.image}>
       </ImageBackground> */}
-
       {/* https://reactnative.dev/docs/images */}
       <Image source={img} />
-
       {/* <ImageBackground source={require('../assets/calloutBubble.png')} 
         style={styles.image}>
           <Text>hey lol</Text>
       </ImageBackground> */}
-
       <Pressable
         style={[styles.button, styles.shadowProp]}
         onPress={() => navigation.navigate("TimerPick")}
       >
         <Text style={styles.buttonText}>study</Text>
       </Pressable>
-
       <Pressable style={[styles.roundButton, styles.shadowProp]}>
         <MaterialCommunityIcons name="hanger" size={24} color="black" />
       </Pressable>

@@ -32,7 +32,8 @@ const PickPet = ({ navigation }) => {
             onPress={() =>
               navigation.navigate("ConfirmPet", {
                 name: "Feneca",
-                img: require("../assets/pinkFox.png")
+                img: require("../assets/pinkFox.png"),
+                type: "fox"
               })
             }
           >
@@ -46,7 +47,8 @@ const PickPet = ({ navigation }) => {
             onPress={() =>
               navigation.navigate("ConfirmPet", {
                 name: "Tyrion",
-                img: require("../assets/redTiger.png")
+                img: require("../assets/redTiger.png"),
+                type: "tiger"
               })
             }
           >
@@ -61,7 +63,8 @@ const PickPet = ({ navigation }) => {
             onPress={() =>
               navigation.navigate("ConfirmPet", {
                 name: "Herbert",
-                img: require("../assets/greenHyena2.png")
+                img: require("../assets/greenHyena2.png"),
+                type: "hyena"
               })
             }
           >
