@@ -13,16 +13,10 @@ const BurgerMenu = ({ navigation }) => {
         <View>
         {openMenu ? 
             <View style={[styles.dropDownCont, styles.shadowProp]}>
-                <Pressable style={({pressed}) => [styles.menuCont, styles.shadowProp, {backgroundColor: pressed? "#9A9AEC" : "#9F9FDC"}]} 
+                <Pressable style={({pressed}) => [styles.menuCont, {backgroundColor: pressed? "#9A9AEC" : "#9F9FDC"}]} 
                 onPress={()=>setMenu(!openMenu)}>
                     <Entypo name="menu" size={45} color="#505050"/>
                 </Pressable>
-
-                <Pressable 
-                style={({pressed}) => [styles.menuItem]}
-                onPress={() => {navigation.navigate("TimerPick"); setMenu(!openMenu);}}>
-                    <MaterialCommunityIcons name="storefront-outline" size={35} color="#505050" />
-                </Pressable> 
 
                 <Pressable
                 style={({pressed}) => [styles.menuItem]}
@@ -68,13 +62,11 @@ const styles = StyleSheet.create({
   },
   dropDownCont: {
     backgroundColor: "#CBCBF7",
-    height: 58,
-    width: 58,
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 15, 
     width: 58,
-    height: 340,
+    height: 260,
     paddingBottom: 20,
   },
 });

@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import BurgerMenu from "../Components/burgerMenu";
+import LifeBar from "../Components/lifeBar";
+import Coins from "../Components/coins";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import Routes from "../routes/Routes";
 // import { collection, doc, setDoc } from "firebase/firestore";
@@ -41,32 +43,46 @@ const Landing = ({ navigation }) => {
       start={{ x: 0, y: 0 }}
       locations={["0.77%", "37.93%", "60.5%", "65.94%", "96.15%"]}
     >
-      <BurgerMenu navigation={navigation}/>
+      
+      <View style={styles.topRow}>
+        <View style={styles.topLeft}>
+          <Text className="text-3xl font-fredoka text-white m-1.5">
+            {user && user.username}
+          </Text> 
 
-      <Text className="text-4xl font-fredoka text-white">
-        Welcome, {user && user.username}
-      </Text>
-      {/* <ImageBackground source={require('../assets/callout.png')} resizeMode="cover" style={styles.image}>
-      </ImageBackground> */}
+          <LifeBar percent={0.9}/>
+          <Coins numCoins = {165}/>
+        </View>
 
-      {/* https://reactnative.dev/docs/images */}
-      <Image source={require('../assets/greenHyena2.png')} />
+        <View style={styles.topRight}>
+          <BurgerMenu navigation={navigation}/>
+        </View>
+      </View>
 
-      {/* <ImageBackground source={require('../assets/calloutBubble.png')} 
-        style={styles.image}>
-          <Text>hey lol</Text>
-      </ImageBackground> */}
+      <View style='styles.midRow'>
+        <Text className="text-4xl font-fredoka text-white mb-10">
+          Welcome, {user && user.username}
+        </Text> 
 
-      <Pressable
+        {/* https://reactnative.dev/docs/images */}
+        <Image source={require('../assets/greenHyena2.png')} />
+      </View>
+
+      <View style={styles.buttonRow}>
+        <Pressable style={[styles.roundButton, styles.shadowProp]}>
+          <MaterialCommunityIcons name="hanger" size={30} color="black" />
+        </Pressable>
+
+        <Pressable
         style={[styles.button, styles.shadowProp]}
-        onPress={() => navigation.navigate("TimerPick")}
-      >
-        <Text style={styles.buttonText}>study</Text>
-      </Pressable>
+        onPress={() => navigation.navigate("TimerPick")}>
+          <Text style={styles.buttonText}>study</Text>
+        </Pressable>
 
-      <Pressable style={[styles.roundButton, styles.shadowProp]}>
-        <MaterialCommunityIcons name="hanger" size={24} color="black" />
-      </Pressable>
+        <Pressable style={[styles.roundButton, styles.shadowProp]}>
+          <MaterialCommunityIcons name="storefront-outline" size={30} color="black" />
+        </Pressable>
+      </View>
     </LinearGradient>
   );
 };
@@ -74,8 +90,8 @@ const Landing = ({ navigation }) => {
 const styles = StyleSheet.create({
   linGrad: {
     alignItems: "center",
-    justifyContent: "center",
-    flex: 1
+    justifyContent: 'space-evenly',
+    flex: 1,
   },
   image: {
     flex: 1,
@@ -84,6 +100,37 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     backgroundColor: "red"
+  },
+  topRow: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // backgroundColor: 'red',
+    paddingLeft: 22,
+    paddingRight: 22,
+    zIndex: 2,
+  },
+  topLeft: {
+    alignItems: 'flex-start',
+    // backgroundColor: 'yellow',
+  },
+  topRight: {
+    // backgroundColor: "blue",
+    position: 'absolute',
+    top: '15%',
+    right: '7%',
+  },
+  midRow: {
+    zIndex: 1,
+  },
+  buttonRow: {
+    // backgroundColor: 'red',
+    alignSelf: 'stretch',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    flexDirection: "row",
+    zIndex: 2,
   },
   shadowProp: {
     shadowColor: "#00000",
@@ -104,7 +151,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 100,
-    padding: 10
+    padding: 10,
+    marginTop: 45,
+    height:56,
+    width: 56,
   },
   buttonText: {
     fontFamily: "WorkSansMedium",
