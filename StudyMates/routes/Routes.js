@@ -7,6 +7,9 @@ import Profile from "../screens/Profile";
 import TimerScreen from "../screens/timerScreen";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
+import PickPet from "../screens/pickPet";
+import ConfirmPet from "../screens/confirmPet";
+import NamePet from "../screens/namePet";
 import Store from "../screens/Store";
 
 const Stack = createNativeStackNavigator();
@@ -23,6 +26,21 @@ function Routes() {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PickPet"
+          component={PickPet}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ConfirmPet"
+          component={ConfirmPet}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NamePet"
+          component={NamePet}
           options={{ headerShown: false }}
         />
         <Stack.Screen

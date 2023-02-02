@@ -18,8 +18,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import { collection, doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
 
-const Landing = ({ navigation }) => {
+const Landing = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
+  const [img, setImg] = useState(null);
 
   const getUser = async () => {
     const { uid } = auth.currentUser;
@@ -28,13 +29,29 @@ const Landing = ({ navigation }) => {
     const userRef = db.collection("users").doc(uid);
     const doc = await userRef.get();
     const userData = doc.data();
-    // console.log(userData);
     setUser(userData);
+    // console.log(userData);
+
+    const petid = userData.petid;
+    // console.log("user pet id:", petid);
+
+    const petRef = db.collection("pets").doc(petid);
+
+    const petDoc = await petRef.get();
+    const petData = petDoc.data();
+
+    // console.log("pet type", petData.type);
+    petData.type === "fox"
+      ? setImg(require("../assets/pinkFox.png"))
+      : petData.type === "tiger"
+      ? setImg(require("../assets/redTiger.png"))
+      : setImg(require("../assets/greenHyena2.png"));
   };
 
   useEffect(() => {
     getUser();
-  }, []);
+    // imgCheck();
+  }, [user]);
 
   return (
     <LinearGradient
@@ -43,29 +60,28 @@ const Landing = ({ navigation }) => {
       start={{ x: 0, y: 0 }}
       locations={["0.77%", "37.93%", "60.5%", "65.94%", "96.15%"]}
     >
-      
       <View style={styles.topRow}>
         <View style={styles.topLeft}>
           <Text className="text-3xl font-fredoka text-white m-1.5">
             {user && user.username}
-          </Text> 
+          </Text>
 
-          <LifeBar percent={0.9}/>
-          <Coins numCoins = {165}/>
+          <LifeBar percent={0.9} />
+          <Coins numCoins={165} />
         </View>
 
         <View style={styles.topRight}>
-          <BurgerMenu navigation={navigation}/>
+          <BurgerMenu navigation={navigation} />
         </View>
       </View>
 
-      <View style='styles.midRow'>
+      <View style="styles.midRow">
         <Text className="text-4xl font-fredoka text-white mb-10">
           Welcome, {user && user.username}
-        </Text> 
+        </Text>
 
         {/* https://reactnative.dev/docs/images */}
-        <Image source={require('../assets/greenHyena2.png')} />
+        <Image source={img} />
       </View>
 
       <View style={styles.buttonRow}>
@@ -74,15 +90,21 @@ const Landing = ({ navigation }) => {
         </Pressable>
 
         <Pressable
-        style={[styles.button, styles.shadowProp]}
-        onPress={() => navigation.navigate("TimerPick")}>
+          style={[styles.button, styles.shadowProp]}
+          onPress={() => navigation.navigate("TimerPick")}
+        >
           <Text style={styles.buttonText}>study</Text>
         </Pressable>
 
-        <Pressable 
-        style={[styles.roundButton, styles.shadowProp]}
-        onPress={() => navigation.navigate("Store")}>
-          <MaterialCommunityIcons name="storefront-outline" size={30} color="black" />
+        <Pressable
+          style={[styles.roundButton, styles.shadowProp]}
+          onPress={() => navigation.navigate("Store")}
+        >
+          <MaterialCommunityIcons
+            name="storefront-outline"
+            size={30}
+            color="black"
+          />
         </Pressable>
       </View>
     </LinearGradient>
@@ -92,8 +114,8 @@ const Landing = ({ navigation }) => {
 const styles = StyleSheet.create({
   linGrad: {
     alignItems: "center",
-    justifyContent: 'space-evenly',
-    flex: 1,
+    justifyContent: "space-evenly",
+    flex: 1
   },
   image: {
     flex: 1,
@@ -104,35 +126,35 @@ const styles = StyleSheet.create({
     backgroundColor: "red"
   },
   topRow: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignSelf: "stretch",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     // backgroundColor: 'red',
     paddingLeft: 22,
     paddingRight: 22,
-    zIndex: 2,
+    zIndex: 2
   },
   topLeft: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start"
     // backgroundColor: 'yellow',
   },
   topRight: {
     // backgroundColor: "blue",
-    position: 'absolute',
-    top: '15%',
-    right: '7%',
+    position: "absolute",
+    top: "15%",
+    right: "7%"
   },
   midRow: {
-    zIndex: 1,
+    zIndex: 1
   },
   buttonRow: {
     // backgroundColor: 'red',
-    alignSelf: 'stretch',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    alignSelf: "stretch",
+    justifyContent: "space-evenly",
+    alignItems: "center",
     flexDirection: "row",
-    zIndex: 2,
+    zIndex: 2
   },
   shadowProp: {
     shadowColor: "#00000",
@@ -155,8 +177,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 10,
     marginTop: 45,
-    height:56,
-    width: 56,
+    height: 56,
+    width: 56
   },
   buttonText: {
     fontFamily: "WorkSansMedium",

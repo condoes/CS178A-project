@@ -5,12 +5,14 @@ module.exports = {
     extend: {
       colors: {
         cream: "#E4E5E3",
+        offwhite: "#FFFCEE",
         pink: "#FFB2B2",
         purple: "#C3C3F0",
         lightpurple: "#E6E0FF",
         tan: "#FFF2D4",
         red: "#FF9F9F",
-        darkgray: "#505050"
+        darkgray: "#505050",
+        green: "#D1EBCB"
       },
       fontFamily: {
         fredoka: "FredokaMedium",

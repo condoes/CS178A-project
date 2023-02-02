@@ -1,17 +1,34 @@
 import { React, useState, useEffect } from "react";
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable, TextInput, AsyncStorage } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 
 const Login = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const username = route.params;
 
+  const handleScreen = async () => {
+    const { uid } = auth.currentUser;
+    const userRef = db.collection("users").doc(uid);
+    const doc = await userRef.get();
+    const userData = doc.data();
+    console.log("user pet id:", userData.petid);
+
+    if (userData.petid === "") {
+      navigation.navigate("PickPet");
+    } else {
+      navigation.navigate("Landing");
+    }
+  };
+
   useEffect(() => {
     const loggedIn = auth.onAuthStateChanged(user => {
+      // const { uid } = auth.currentUser;
+      // console.log(user.petid);
       if (user) {
-        navigation.navigate("Landing");
+        // navigation.navigate("Landing");
+        handleScreen();
       }
     });
     return loggedIn;
@@ -37,14 +54,14 @@ const Login = ({ route, navigation }) => {
       >
         <Text className="text-5xl font-fredoka p-2">StudyMates!</Text>
         <TextInput
-          className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="email"
           onChangeText={text => setEmail(text)}
           value={email}
           autoComplete="email"
         />
         <TextInput
-          className="mt-2 mb-4 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          className="mt-2 mb-4 text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="password"
           autoComplete="email"
           onChangeText={text => setPassword(text)}
