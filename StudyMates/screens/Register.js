@@ -7,7 +7,6 @@ import { collection, getDocs, doc, setDoc } from "firebase/firestore/lite";
 const Register = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = async () => {

@@ -9,13 +9,25 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
+import { auth, db } from "../firebase";
 
 const NamePet = ({ route, navigation }) => {
   const { name, img } = route.params;
   //   console.log("img:", img);
-  const [newName, setNewName] = useState({ name });
+  const [newName, setNewName] = useState(name);
   //   console.log("name:", name);
   //   console.log("new name:", newName);
+  const handlePetLog = () => {
+    const { uid } = auth.currentUser;
+    const pet = {
+      name: newName,
+      exp: 0,
+      level: 1,
+      user: uid
+    };
+    db.collection("pets").add(pet);
+    navigation.navigate("Landing", { img: img });
+  };
 
   return (
     <KeyboardAvoidingView behavior="position" keyboardVerticalOffset="-200">
@@ -41,7 +53,7 @@ const NamePet = ({ route, navigation }) => {
           />
           <Pressable
             style={[styles.confirmButton, styles.shadowProp]}
-            onPress={() => navigation.navigate("Landing", { img: img })}
+            onPress={handlePetLog}
           >
             <Text className="font-fredoka text-3xl">confirm</Text>
           </Pressable>
