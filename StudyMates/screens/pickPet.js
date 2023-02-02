@@ -31,7 +31,7 @@ const PickPet = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate("ConfirmPet", {
-                name: "Miss Feneca, the Fox",
+                name: "Feneca",
                 img: require("../assets/pinkFox.png")
               })
             }
@@ -45,7 +45,7 @@ const PickPet = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate("ConfirmPet", {
-                name: "Sir Tyrion, the Tiger",
+                name: "Tyrion",
                 img: require("../assets/redTiger.png")
               })
             }
@@ -60,7 +60,7 @@ const PickPet = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() =>
               navigation.navigate("ConfirmPet", {
-                name: "H, the Hyena",
+                name: "Herbert",
                 img: require("../assets/greenHyena2.png")
               })
             }

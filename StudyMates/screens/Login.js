@@ -37,14 +37,14 @@ const Login = ({ route, navigation }) => {
       >
         <Text className="text-5xl font-fredoka p-2">StudyMates!</Text>
         <TextInput
-          className="text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="email"
           onChangeText={text => setEmail(text)}
           value={email}
           autoComplete="email"
         />
         <TextInput
-          className="mt-2 mb-4 text-3xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+          className="mt-2 mb-4 text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
           placeholder="password"
           autoComplete="email"
           onChangeText={text => setPassword(text)}
