@@ -51,7 +51,7 @@ const Landing = ({ route, navigation }) => {
   useEffect(() => {
     getUser();
     // imgCheck();
-  }, [user]);
+  }, []);
 
   return (
     <LinearGradient
