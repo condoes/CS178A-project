@@ -23,7 +23,7 @@ const BurgerMenu = ({ navigation }) => {
                 <Pressable
                 style={({ pressed }) => [styles.menuItem]}
                 onPress={() => {
-                navigation.navigate("TimerPick");
+                navigation.navigate("Profile");
                 setMenu(!openMenu);
                 }}>
                     <Ionicons name="person-circle-outline" size={35} color="#505050" />

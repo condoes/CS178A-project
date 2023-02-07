@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Landing from "../screens/landing";
 import TimerPick from "../screens/timerPick";
 import Profile from "../screens/Profile";
+import Signout from "../screens/Signout";
 import TimerScreen from "../screens/timerScreen";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
@@ -17,7 +18,7 @@ const Stack = createNativeStackNavigator();
 function Routes() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Profile">
         <Stack.Screen
           name="Login"
           component={Login}
@@ -63,7 +64,11 @@ function Routes() {
           component={Store}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen 
+          name="Profile" 
+          component={Profile} 
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
