@@ -12,6 +12,7 @@ import PickPet from "../screens/pickPet";
 import ConfirmPet from "../screens/confirmPet";
 import NamePet from "../screens/namePet";
 import Store from "../screens/Store";
+import Settings from '../screens/settings'
 
 const Stack = createNativeStackNavigator();
 
@@ -66,7 +67,7 @@ function Routes() {
         />
         <Stack.Screen 
           name="Profile" 
-          component={Profile} 
+          component={Profile}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

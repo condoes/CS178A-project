@@ -32,7 +32,7 @@ const BurgerMenu = ({ navigation }) => {
                 <Pressable
                 style={({ pressed }) => [styles.menuItem]}
                 onPress={() => {
-                navigation.navigate("TimerPick");
+                navigation.navigate("Settings");
                 setMenu(!openMenu);
                 }}>
                     <Ionicons name="settings-outline" size={35} color="#505050" />
