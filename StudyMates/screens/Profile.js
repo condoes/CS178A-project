@@ -31,7 +31,7 @@ const Profile = ({ route, navigation }) => {
 
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, []);
 
   const [actionTriggered, setActionTriggered] = useState(''); // here we go
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,15 +39,15 @@ const Profile = ({ route, navigation }) => {
   // const [modalState, setModalState] = useState(false);
   function signOut() {
     setModalVisible(true);
-    setActionTriggered('SIGNOUT')
+    setActionTriggered('SIGNOUT');
   }
 
-  function changeEmail(message) {
-    setModalState({state: "email", message});
+  function changeEmail() {
+    setActionTriggered('EMAIL');
   }
 
-  function changePassword(message) {
-    setModalState({state: "password", message});
+  function changePassword() {
+    setActionTriggered('PASSWORD');
   }
 
   // function yesOut(message) {
@@ -96,7 +96,7 @@ const Profile = ({ route, navigation }) => {
 
             <Pressable
               style={[styles.button, styles.shadowProp]}
-              onPress={() => navigation.navigate("Landing")}
+              onPress={() => changeEmail()}
             >
               <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
                 Change Email
@@ -105,7 +105,7 @@ const Profile = ({ route, navigation }) => {
 
             <Pressable
               style={[styles.button, styles.shadowProp]}
-              onPress={() => navigation.navigate("Landing")}
+              onPress={() => changePassword()}
             >
               <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
                 Change Password
@@ -133,9 +133,34 @@ const Profile = ({ route, navigation }) => {
         visible={modalVisible}
         onClose={() => {
           setActionTriggered('');
-        }}>
+        }}
+        >
 
         { actionTriggered === 'SIGNOUT' ?
+          <View style={styles.container}>    
+
+            <View style={styles.modalView}>
+
+              <View className="flex flex-row items-center justify-center"> 
+                  <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
+                    Are you sure you want to sign out? :T
+                  </Text>
+                  
+                  <Pressable className = "bg-[#D1EBCB] items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                    <Entypo  name="check" size={32} color="white" alignItems="center"/>
+                  </Pressable>
+
+                  <Pressable className = "bg-red items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                    <Entypo name="cross" size={32} color="white" alignItems="center"/>
+                  </Pressable>
+
+              </View>
+
+            </View>
+
+          </View> :
+
+          actionTriggered === 'EMAIL' ?
           <View style={styles.container}>    
 
             <View style={styles.modalView}>
@@ -151,13 +176,35 @@ const Profile = ({ route, navigation }) => {
                   <Pressable className = "bg-red items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
                     <Entypo name="cross" size={32} color="white" alignItems="center"/>
                   </Pressable>
-
               </View>
 
             </View>
 
+          </View> :
+
+          actionTriggered === 'PASSWORD' ?
+          <View style={styles.container}>    
+
+          <View style={styles.modalView}>
+
+            <View className="flex flex-row items-center justify-center"> 
+                <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
+                  Are you sure you want to sign out? :T
+                </Text>
+                
+                <Pressable className = "bg-[#D1EBCB] items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                  <Entypo  name="check" size={32} color="white" alignItems="center"/>
+                </Pressable>
+                <Pressable className = "bg-red items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                  <Entypo name="cross" size={32} color="white" alignItems="center"/>
+                </Pressable>
+            </View>
+
           </View>
-          : null
+
+        </View> :
+
+        null
         }
 
       </Modal>      
