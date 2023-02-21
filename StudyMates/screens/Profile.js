@@ -2,6 +2,7 @@ import { React, useState, useEffect,  } from "react";
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   Pressable,
   Image,
@@ -15,6 +16,7 @@ import {
 import { MaterialCommunityIcons, SimpleLineIcons, Ionicons, AntDesign , Entypo} from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { db, auth } from "../firebase";
+import firebase from "../firebase";
 
 const Profile = ({ route, navigation }) => {
 
@@ -32,6 +34,22 @@ const Profile = ({ route, navigation }) => {
   useEffect(() => {
     getUser();
   }, []);
+
+  const handleUpdate = async() => {
+    await firebase.auth.currentUser.updateProfile(
+      {
+        username: user.username,
+        email: user.email,
+      }
+    );
+    // firestore()
+    // .collection('users')
+    // .doc(user.uid)
+    // .update({
+    //   username: user.username,
+    //   email: user.email,
+    // })
+  }
 
   const [actionTriggered, setActionTriggered] = useState(''); // here we go
   const [modalVisible, setModalVisible] = useState(false);
@@ -81,20 +99,57 @@ const Profile = ({ route, navigation }) => {
         <View style={styles.infoContainer}>
 
           <View style={styles.infoView}>
+            {/* <View>
+              <Text className="text-6xl font-fredoka text-black m-1.5 text-center"> 
+              {user && user.totalStudy}
+              </Text>
+              <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
+                Total Hours Studied
+              </Text>
 
-            <Text className="text-6xl font-fredoka text-black m-1.5 text-center"> 
-            {user && user.totalStudy}
-            </Text>
+              <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
+                Email: {user && user.email}
+              </Text>
 
-            <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
-              Total Hours Studied
-            </Text>
-
+            </View> */}
+            <View>
+                <TextInput
+                  className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+                  placeholder="Username"
+                  autoCorrect={false}
+                  value={user ? user.username : ''}
+                  onChangeText={(txt) => setUser({...user, username: txt})}
+                />
+            </View>
             <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-              Email: {user && user.email}
+                Change Username
             </Text>
 
-            <Pressable
+            <View>
+                <TextInput
+                  className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+                  placeholder="Email"
+                  value={user ? user.email : ''}
+                  onChangeText={(txt) => setUser({...user, email: txt})}
+                  autoComplete="email"
+                />
+            </View>
+            <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
+                Change Email
+            </Text>
+
+            <View>
+                <TextInput
+                  className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+                  placeholder="Password"
+                  // value={"password"}
+                  // onChangeText={(txt) => txt}
+                />
+            </View>
+            <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
+                Change Password
+            </Text>
+            {/* <Pressable
               style={[styles.button, styles.shadowProp]}
               onPress={() => changeEmail()}
             >
@@ -110,13 +165,21 @@ const Profile = ({ route, navigation }) => {
               <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
                 Change Password
               </Text>
+            </Pressable> */}
+            <Pressable
+              style={[styles.button, styles.shadowProp]}
+              onPress={() => handleUpdate()}
+            >
+              <Text className="text-3xl font-fredoka text-black m-1.5 text-center">
+                Update Info
+              </Text>
             </Pressable>
 
             <Pressable
               style={[styles.button, styles.shadowProp]}
               onPress={() => signOut()}
             >
-              <Text className="text-3xl font-fredoka text-black m-1.5 text-center">
+              <Text className="text-3xl font-fredoka text-red m-1.5 text-center">
                 Sign Out
               </Text>
             </Pressable>
@@ -146,11 +209,17 @@ const Profile = ({ route, navigation }) => {
                     Are you sure you want to sign out? :T
                   </Text>
                   
-                  <Pressable className = "bg-[#D1EBCB] items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                  <Pressable 
+                  className = "bg-[#D1EBCB] items-center justify-center" 
+                  style = {styles.button} 
+                  onPress={()=> {navigation.navigate("Landing")}}>
                     <Entypo  name="check" size={32} color="white" alignItems="center"/>
                   </Pressable>
 
-                  <Pressable className = "bg-red items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                  <Pressable 
+                  className = "bg-red items-center justify-center" 
+                  style = {styles.button} 
+                  onPress={()=> {navigation.navigate("TimerPick")}}>
                     <Entypo name="cross" size={32} color="white" alignItems="center"/>
                   </Pressable>
 
@@ -158,7 +227,7 @@ const Profile = ({ route, navigation }) => {
 
             </View>
 
-          </View> :
+          {/* </View> :
 
           actionTriggered === 'EMAIL' ?
           <View style={styles.container}>    
@@ -170,10 +239,17 @@ const Profile = ({ route, navigation }) => {
                     Are you sure you want to sign out? :T
                   </Text>
                   
-                  <Pressable className = "bg-[#D1EBCB] items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                  <Pressable 
+                  className = "bg-[#D1EBCB] items-center justify-center" 
+                  style = {styles.button} 
+                  onPress={()=> {navigation.navigate("Landing")}}>
                     <Entypo  name="check" size={32} color="white" alignItems="center"/>
                   </Pressable>
-                  <Pressable className = "bg-red items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+
+                  <Pressable 
+                  className = "bg-red items-center justify-center" 
+                  style = {styles.button} 
+                  onPress={()=> {navigation.navigate("Landing")}}>
                     <Entypo name="cross" size={32} color="white" alignItems="center"/>
                   </Pressable>
               </View>
@@ -192,15 +268,21 @@ const Profile = ({ route, navigation }) => {
                   Are you sure you want to sign out? :T
                 </Text>
                 
-                <Pressable className = "bg-[#D1EBCB] items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                <Pressable 
+                className = "bg-[#D1EBCB] items-center justify-center" 
+                style = {styles.button} 
+                onPress={()=> {navigation.navigate("Landing")}}>
                   <Entypo  name="check" size={32} color="white" alignItems="center"/>
                 </Pressable>
-                <Pressable className = "bg-red items-center justify-center" style = {styles.button} onPress={()=> {navigation.navigate("Landing")}}>
+                <Pressable 
+                className = "bg-red items-center justify-center" 
+                style = {styles.button} 
+                onPress={()=> {navigation.navigate("Landing")}}>
                   <Entypo name="cross" size={32} color="white" alignItems="center"/>
                 </Pressable>
             </View>
 
-          </View>
+          </View> */}
 
         </View> :
 
@@ -265,6 +347,14 @@ const styles = StyleSheet.create({
     fontFamily: "FredokaMedium",
     width:300
   },
+  action: {
+    flexDirection: 'row',
+    marginTop: 10,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f2f2f2',
+    paddingBottom: 5,
+  }
 });
 
 export default Profile;
