@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Landing from "../screens/landing";
 import TimerPick from "../screens/timerPick";
 import Profile from "../screens/Profile";
-import Signout from "../screens/Signout";
+//import Signout from "../screens/Signout";
 import TimerScreen from "../screens/timerScreen";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
