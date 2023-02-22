@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Landing from "../screens/landing";
 import TimerPick from "../screens/timerPick";
 import Profile from "../screens/Profile";
-import Signout from "../screens/Signout";
+// import Signout from "../screens/Signout";
 import TimerScreen from "../screens/timerScreen";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
@@ -12,7 +12,7 @@ import PickPet from "../screens/pickPet";
 import ConfirmPet from "../screens/confirmPet";
 import NamePet from "../screens/namePet";
 import Store from "../screens/Store";
-import Settings from '../screens/settings'
+import Settings from "../screens/settings";
 
 const Stack = createNativeStackNavigator();
 
@@ -65,8 +65,8 @@ function Routes() {
           component={Store}
           options={{ headerShown: false }}
         />
-        <Stack.Screen 
-          name="Profile" 
+        <Stack.Screen
+          name="Profile"
           component={Profile}
           options={{ headerShown: false }}
         />
