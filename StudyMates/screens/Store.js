@@ -1,52 +1,71 @@
 import { StoreContext } from "nativewind/dist/style-sheet";
-import { React, useState } from "react";
+import { React, useState , useEffect} from "react";
 import { View, Text, StyleSheet, Pressable, Image, ImageBackground, TouchableOpacity,Modal} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import customButton from "../customButton";
 import { MaterialCommunityIcons, SimpleLineIcons, Ionicons, AntDesign , Entypo} from "@expo/vector-icons";
 import { CurrentRenderContext } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
+import ShopItem from "../Components/shopItem"
+import Coins from "../Components/coins";
+import { db, auth } from "../firebase";
+
 
 
 const Store = ({ navigation }) =>{
-  const [modalVisible, setModalVisible] = useState(false);
-    return (   
+  const [userCoins, setUserCoins] = useState(null);
+
+  const getUserCoins = async () => {
+    const { uid }  = auth.currentUser;
+    const userRef = db.collection("users").doc(uid);
+    const userDoc = await userRef.get();
+    const userData = userDoc.data();
+
+    setUserCoins(userData.coins);
+  };
+  useEffect(() => {
+    getUserCoins();
+  }, []);
+return (   
     <View>
 
     <ImageBackground source={require('../assets/shop.png')} resizeMode="cover" style={styles.image}>
 
+      {/* Back Button */}
       <Pressable
       className="mr-auto mt-10 mb-auto ml-5"
       onPress={() => navigation.navigate("Landing")}>
         <AntDesign name="back" size={32} color="black" />
       </Pressable>
 
-      <Text className="mt-24" style={styles.shopName}> Girly Pop Shop</Text>
+      {/* Shop Name */}
+      <Text className="mt-24 items-center" style={styles.shopName}> Girly Pop Shop {"\n"} 
+      <Coins className="mb-24" numCoins = {userCoins}/></Text>
+      {/* <Coins numCoins = {userCoins}/> */}
 
+      {/* SHELF 1 */}
       <View style={styles.foodContainer}>
-        {/* SHELF 1 */}
-        <TouchableOpacity onPress={() => {setModalVisible(!modalVisible);}}>
+        {/* <TouchableOpacity onPress={() => {setModalVisible(!modalVisible);}}>
           <Image source={require('../assets/food/banana.png')}></Image>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
-          <Image source={require('../assets/food/cherry.png')}></Image>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
-          <Image source={require('../assets/food/kiwi.png')}></Image>
-        </TouchableOpacity>
+        <ShopItem id = {'banana'} />
+        <ShopItem id = {'cherry'} />
+        <ShopItem id = {'kiwi'} />
 
       </View>
     
+      {/* SHELF 2 */}
       <View style={styles.foodContainer}>
-        {/* SHELF 2 */}
-        <Image source={require('../assets/food/waffles.png')}></Image>
-        <Image source={require('../assets/food/hotDog.png')}></Image>
+
+        <ShopItem id = {'waffles'} />
+        <ShopItem id = {'hotDog'} />
+
       </View>
 
     </ImageBackground>
-    <Modal
+    
+    {/* <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -74,7 +93,7 @@ const Store = ({ navigation }) =>{
             </View>
           </View>
         </View>
-      </Modal>
+    </Modal> */}
 
 
     </View>
@@ -102,11 +121,12 @@ const styles = StyleSheet.create({
   shopName:{
     flex: 1,
     fontFamily: "FredokaMedium",
-    fontSize: 52,
+    fontSize: 50,
     color: 'white',
     textShadowOffset: {width: 2, height: 2},
     textShadowColor:"black",
-    textShadowRadius: 1
+    textShadowRadius: 1,
+    textAlign: "center"
   }, 
   modalView:{
     //backgroundColor: "#D1EBCB",
@@ -134,10 +154,6 @@ const styles = StyleSheet.create({
   button:{
     borderRadius:42,
     elevation:5,
-    // paddingTop: 24,
-    // paddingBottom: 24,
-    // paddingLeft: 64,
-    // paddingRight: 64,
     height: 50,
     width:110,
     margin: 6,
