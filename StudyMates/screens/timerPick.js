@@ -3,10 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
+  TouchableOpacity,
   Pressable,
   Alert,
-  line
+  Image
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
@@ -44,13 +44,13 @@ const TimerPick = ({ navigation }) => {
   };
   return (
     <LinearGradient
-      style={styles.linGrad}
+      className="h-screen w-screen items-center flex z-[1]"
       colors={["#EDEDED", "#FFDADA", "#FFC3C3", "#B0B0F8"]}
       start={{ x: 0, y: 0 }}
       locations={["5.53%", "13.4%", "55.36%", "100%"]}
     >
       <Pressable
-        className="mr-auto mt-12 ml-5"
+        className="mr-auto mt-12 ml-5 z-[3]"
         onPress={() => navigation.navigate("Landing")}
       >
         <AntDesign name="back" size={30} color="black" />
@@ -166,25 +166,41 @@ const TimerPick = ({ navigation }) => {
 
         {/* BUTTONS AT THE END */}
         <View style={styles.buttonContainer}>
-          <Pressable style={styles.button} onPress={() => reset()}>
+          <TouchableOpacity style={styles.button} onPress={() => reset()}>
             <Text style={styles.buttonText}>reset</Text>
-          </Pressable>
-          <Pressable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.button}
             onPress={() =>
               navigation.navigate("TimerScreen", {
-                starting: 1,
+                count: 0,
                 pomoT: pomoTime,
                 shortT: shortBreak,
-                longT: longBreak
+                longT: longBreak,
               })
             }
           >
             <Text style={styles.buttonText}>start</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         {/* onPress={() => navigation.navigate("TimerPick")} */}
       </View>
+      
+      <Image
+        className="z-[2] absolute top-[15%] right-[40%] w-[70%] h-[13%]"
+        source={require("../assets/clouds_1.png")}
+        resizeMode="contain"
+      />
+      <Image
+        className="z-[2] absolute top-[40%] left-[76%] w-[57%] h-[13%]"
+        source={require("../assets/clouds_2.png")}
+        resizeMode="contain"
+      />
+      <Image
+        className="z-[2] absolute bottom-[20%] right-[30%] w-[92%] h-[14%]"
+        source={require("../assets/clouds_3.png")}
+        resizeMode="contain"
+      />
     </LinearGradient>
   );
 };
@@ -195,13 +211,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingBottom: 50
+    paddingBottom: 50,
+    zIndex: 3,
   },
 
   linGrad: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
+    zIndex: 1,
   },
 
   shadowProp: {

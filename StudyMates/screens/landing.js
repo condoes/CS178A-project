@@ -7,7 +7,7 @@ import {
   Image,
   ImageBackground,
   useContext,
-  Button
+  TouchableOpacity
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import BurgerMenu from "../Components/burgerMenu";
@@ -66,8 +66,9 @@ const Landing = ({ route, navigation }) => {
             {user && user.username}
           </Text>
 
-          <LifeBar percent={0.9} />
-          <Coins numCoins={165} />
+          <LifeBar percent={9} />
+          {/* {console.log("user pet id:", user.totalStudy)} */}
+          {/* <Coins numCoins={user.coins} /> */}
         </View>
 
         <View style={styles.topRight}>
@@ -75,8 +76,8 @@ const Landing = ({ route, navigation }) => {
         </View>
       </View>
 
-      <View style="styles.midRow">
-        <Text className="text-4xl font-fredoka text-white mb-10">
+      <View className="z-[3]">
+        <Text className="text-4xl font-fredoka text-white mb-[20%]">
           Welcome, {user && user.username}
         </Text>
 
@@ -85,18 +86,18 @@ const Landing = ({ route, navigation }) => {
       </View>
 
       <View style={styles.buttonRow}>
-        <Pressable style={[styles.roundButton, styles.shadowProp]}>
+        <TouchableOpacity style={[styles.roundButton, styles.shadowProp]}>
           <MaterialCommunityIcons name="hanger" size={30} color="black" />
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           style={[styles.button, styles.shadowProp]}
           onPress={() => navigation.navigate("TimerPick")}
         >
           <Text style={styles.buttonText}>study</Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           style={[styles.roundButton, styles.shadowProp]}
           onPress={() => navigation.navigate("Store")}
         >
@@ -105,8 +106,24 @@ const Landing = ({ route, navigation }) => {
             size={30}
             color="black"
           />
-        </Pressable>
+        </TouchableOpacity>
       </View>
+
+      <Image
+      className="z-[2] absolute top-[35%] right-[50%] w-[70%] h-[13%]"
+      source={require("../assets/clouds_1.png")}
+      resizeMode="contain"
+      />
+      <Image
+        className="z-[2] absolute left-[50%] top-[10%] w-[57%] h-[13%]"
+        source={require("../assets/clouds_2.png")}
+        resizeMode="contain"
+      />
+      <Image
+        className="z-[2] absolute bottom-[-5%]"
+        source={require("../assets/Grass.png")}
+        resizeMode="contain"
+      />
     </LinearGradient>
   );
 };
@@ -115,7 +132,8 @@ const styles = StyleSheet.create({
   linGrad: {
     alignItems: "center",
     justifyContent: "space-evenly",
-    flex: 1
+    flex: 1,
+    zIndex: 1,
   },
   image: {
     flex: 1,
@@ -133,7 +151,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
     paddingLeft: 22,
     paddingRight: 22,
-    zIndex: 2
+    zIndex: 3,
   },
   topLeft: {
     alignItems: "flex-start"
@@ -142,11 +160,9 @@ const styles = StyleSheet.create({
   topRight: {
     // backgroundColor: "blue",
     position: "absolute",
-    top: "15%",
-    right: "7%"
-  },
-  midRow: {
-    zIndex: 1
+    top: "30%",
+    right: "7%",
+    zIndex: 4,
   },
   buttonRow: {
     // backgroundColor: 'red',
@@ -154,7 +170,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     flexDirection: "row",
-    zIndex: 2
+    marginBottom: "10%",
+    zIndex: 3,
   },
   shadowProp: {
     shadowColor: "#00000",
@@ -168,7 +185,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 24,
     height: 56,
-    width: 181
+    width: 181,
+    zIndex: 3,
   },
   roundButton: {
     backgroundColor: "#E6E0FF",
@@ -178,7 +196,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 45,
     height: 56,
-    width: 56
+    width: 56,
+    zIndex: 3,
   },
   buttonText: {
     fontFamily: "WorkSansMedium",
