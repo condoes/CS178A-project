@@ -7,6 +7,7 @@ import Coins from "./coins";
 
 const ShopItem = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modal2Visible, setModal2Visible] = useState(false);
   const [item, setItem] = useState(null);
   const [desc, setDesc] = useState(null);
   const [img, setImg] = useState(null);
@@ -76,26 +77,46 @@ const ShopItem = (props) => {
               <Text style={styles.description}> {desc} {"\n"}</Text>
               <Text style={styles.description}> Would you like to buy for {<Coins numCoins = {cost}/>} ?</Text>
 
-              {/* HELP WHY DOESNT THIS WORK */}
-              <View className = "flex flex-row items-center justify-center">
-                <TouchableOpacity style = {styles.button} 
+              <View style = {styles.twoButtons}>
+                <TouchableOpacity style = {styles.yesButton} 
                   onPress={()=> {
                     if(userCoins >= cost){
                       updateUserCoins();
+                       setModalVisible(!modalVisible);
                     }
-                    setModalVisible(!modalVisible);
+                    else{
+                      setModal2Visible(!modal2Visible);
+                    }
                     }}>
                   <Entypo  name="check" size={32} color="white" alignItems="center"/>
 
                 </TouchableOpacity>
 
-                <TouchableOpacity style = {styles.button} onPress={()=> {setModalVisible(!modalVisible);}}>
+                <TouchableOpacity style = {styles.noButton} onPress={()=> {setModalVisible(!modalVisible);}}>
                   <Entypo  name="cross" size={32} color="white" alignItems="center"/>
                 </TouchableOpacity>
               </View>
           </View>
         </View>
+
+        <Modal animationType="slide" transparent={true} visible={modal2Visible} onRequestClose={() => {
+          setModal2Visible(!modal2Visible);
+        }}>
+          <View style = {styles.container}>
+            <View style ={styles.modal2View}>
+              <Text style = {styles.description}> Ur a Broke Bitch. {"\n"} 
+                You only have {<Coins numCoins = {userCoins}/>} {"\n"}
+                {":("}
+              </Text>
+              <TouchableOpacity style = {styles.downButton} onPress={()=> {setModal2Visible(!modal2Visible);}}>
+                    <Entypo  name="chevron-down" size={40} color="white" alignItems="center"/>
+                  </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
       </Modal>
+
 
     </View>
   );
@@ -108,14 +129,41 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     paddingBottom: 50
   },
-  button:{
-    color: "green",
+  twoButtons:{
+    flexDirection: "row"
+  },
+  downButton:{
+    backgroundColor: "#4D558A",
     borderRadius:42,
     elevation:5,
     height: 50,
     width:110,
     margin: 6,
-    marginTop:10
+    marginTop:10,
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  yesButton:{
+    backgroundColor: "#D1EBCB",
+    borderRadius:42,
+    elevation:5,
+    height: 50,
+    width:110,
+    margin: 6,
+    marginTop:10,
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  noButton:{
+    backgroundColor: "#FF9F9F",
+    borderRadius:42,
+    elevation:5,
+    height: 50,
+    width:110,
+    margin: 6,
+    marginTop:10,
+    alignItems:'center',
+    justifyContent:'center',
   },
   modalView:{
     backgroundColor: "#FFF2D4",
@@ -124,7 +172,16 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems:"center",
     fontFamily: "FredokaMedium",
-    width:300
+    width:350
+  },
+  modal2View:{
+    backgroundColor: "#DAF0F7",
+    borderColor: "#505050",
+    borderRadius: 20,
+    padding: 30,
+    alignItems:"center",
+    fontFamily: "FredokaMedium",
+    width:300  
   },
   description:{
     color:"#505050",
