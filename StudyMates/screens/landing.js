@@ -120,7 +120,7 @@ const Landing = ({ route, navigation }) => {
         resizeMode="contain"
       />
       <Image
-        className="z-[2] absolute bottom-[-5%]"
+        className="z-[2] absolute top-[-42%] w-[170%] h-[170%]"
         source={require("../assets/Grass.png")}
         resizeMode="contain"
       />
