@@ -98,7 +98,7 @@ const Landing = ({ route, navigation }) => {
 
         <Pressable
           style={[styles.roundButton, styles.shadowProp]}
-          onPress={() => navigation.navigate("Store")}
+          onPress={() => navigation.navigate("Store", { user: user })}
         >
           <MaterialCommunityIcons
             name="storefront-outline"
