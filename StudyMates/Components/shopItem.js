@@ -2,8 +2,15 @@ import { StoreContext } from "nativewind/dist/style-sheet";
 import { React, useState, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Image, ImageBackground, TouchableOpacity,Modal} from "react-native";
 import { MaterialCommunityIcons, SimpleLineIcons, Ionicons, AntDesign , Entypo} from "@expo/vector-icons";
-import { db, auth } from "../firebase";
+import { db, auth} from "../firebase";
+import 'firebase/firestore';
+
+import firebase from "firebase/compat/app";
+
+import 'firebase/firestore';
 import Coins from "./coins";
+import { array } from "prop-types";
+import { FieldValue, Firestore } from "firebase/firestore";
 
 const ShopItem = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -19,7 +26,7 @@ const ShopItem = (props) => {
     const itemDoc = await itemRef.get();
     const itemData = itemDoc.data();
 
-    setItem(itemData);
+    setItem(itemData.name);
     setDesc(itemData.description);
     setCost(itemData.cost);
     //setImg(itemData.imgSrc);
@@ -52,9 +59,13 @@ const ShopItem = (props) => {
     setUserCoins(userData.coins);
   };
 
-  const updateUserCoins  = () => {
+  const updateUser  = () => {
     const { uid }  = auth.currentUser;
     db.collection("users").doc(uid).update({coins: userCoins - cost});
+    // db.collection("users").doc(uid).update({
+    //   inventory: firebase.firestore.FieldValue.arrayUnion('cherry')
+    // });
+    db.collection("users").doc(uid).update({inventory: firebase.firestore.FieldValue.arrayUnion(item)});
     };
   
   useEffect(() => {
@@ -68,7 +79,7 @@ const ShopItem = (props) => {
         <Image source={img}/>
       </TouchableOpacity>
       
-      <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => {
+      <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => {
         setModalVisible(!modalVisible);
       }}>
         <View style={styles.container}>
@@ -81,7 +92,7 @@ const ShopItem = (props) => {
                 <TouchableOpacity style = {styles.yesButton} 
                   onPress={()=> {
                     if(userCoins >= cost){
-                      updateUserCoins();
+                      updateUser();
                        setModalVisible(!modalVisible);
                     }
                     else{
