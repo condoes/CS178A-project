@@ -88,7 +88,7 @@ const ShopItem = (props) => {
               <Text style={styles.description}> {desc} {"\n"}</Text>
               <Text style={styles.description}> Would you like to buy for {<Coins numCoins = {cost}/>} ?</Text>
 
-              <View style = {styles.twoButtons}>
+              <View style = {{flexDirection: "row"}}>
                 <TouchableOpacity style = {styles.yesButton} 
                   onPress={()=> {
                     if(userCoins >= cost){
@@ -139,9 +139,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     paddingBottom: 50
-  },
-  twoButtons:{
-    flexDirection: "row"
   },
   downButton:{
     backgroundColor: "#4D558A",
