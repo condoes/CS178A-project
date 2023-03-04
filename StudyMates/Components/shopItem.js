@@ -18,8 +18,14 @@ import {
   Entypo
 } from "@expo/vector-icons";
 import { db, auth } from "../firebase";
+import "firebase/firestore";
+
+import firebase from "firebase/compat/app";
+
+import "firebase/firestore";
 import Coins from "./coins";
-import shopModal from "./shopModal";
+import { array } from "prop-types";
+import { FieldValue, Firestore } from "firebase/firestore";
 
 const ShopItem = ({ id, userCoins, itemToShop }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,7 +44,7 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
     const itemDoc = await itemRef.get();
     const itemData = itemDoc.data();
 
-    setItem(itemData);
+    setItem(itemData.name);
     setDesc(itemData.description);
     setCost(itemData.cost);
     //setImg(itemData.imgSrc);
@@ -71,31 +77,23 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
   //   setUserCoins(userData.coins);
   // };
 
-  const updateUserCoins = () => {
+  const updateUser = () => {
     const { uid } = auth.currentUser;
     userCoins = userCoins - cost;
+    itemToShop(userCoins);
     db.collection("users")
       .doc(uid)
       .update({ coins: userCoins - cost });
-    console.log("user coins in shopItem: ", userCoins);
+    // db.collection("users").doc(uid).update({
+    //   inventory: firebase.firestore.FieldValue.arrayUnion('cherry')
+    // });
+    db.collection("users")
+      .doc(uid)
+      .update({ inventory: firebase.firestore.FieldValue.arrayUnion(item) });
   };
 
   useEffect(() => {
     getItem();
-    //UserCoins();
-    //const { uid } = auth.currentUser;
-    // const unsub = db
-    //   .collection("users")
-    //   .doc(uid)
-    //   .onSnapshot(doc => {
-    //     const docu = doc.data();
-    //     const docCop = { ...docu };
-    //     const coins = docCop.coins;
-    //     setUserCoins(coins);
-    //   });
-
-    // return () => unsub();
-    //UserCoins();
   }, []);
 
   return (
@@ -109,7 +107,7 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
       </TouchableOpacity>
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -133,8 +131,7 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
                 style={styles.yesButton}
                 onPress={() => {
                   if (userCoins >= cost) {
-                    updateUserCoins();
-                    itemToShop(userCoins);
+                    updateUser();
                     setModalVisible(!modalVisible);
                   } else {
                     setModal2Visible(!modal2Visible);

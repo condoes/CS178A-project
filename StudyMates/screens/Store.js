@@ -28,41 +28,16 @@ import { db, auth } from "../firebase";
 const Store = ({ navigation, route }) => {
   const { user } = route.params;
   const [userCoins, setUserCoins] = useState(user.coins);
-  console.log("init coins:", userCoins);
-  // const [user, setUser] = useState();
+  console.log("coins:", userCoins);
   const itemToShop = updateCoins => {
     setUserCoins(updateCoins);
-  };
-
-  const getUserCoins = async () => {
-    const { uid } = auth.currentUser;
-    const userRef = db.collection("users").doc(uid);
-    const userDoc = await userRef.get();
-    const userData = userDoc.data();
-    setUser(userData);
-    console.log("coins: ", user && user.coins);
-    console.log(user);
   };
 
   // const [value] = useCollection(collection(db, "users"), {
   //   snapshotListenOptions: { includeMetadataChanges: true }
   // });
 
-  useEffect(() => {
-    //getUserCoins();
-    //setUserCoins(user && user.coins);
-    //const { uid } = auth.currentUser;
-    // const unsub = db
-    //   .collection("users")
-    //   .doc(uid)
-    //   .onSnapshot(doc => {
-    //     setUserCoins(doc.data().coins);
-    //     console.log(userCoins);
-    //   });
-    // return () => unsub();
-    //itemToShop();
-    //console.log(user && user.coins);
-  }, []);
+  useEffect(() => {}, [userCoins]);
 
   // if (user !== undefined) {
   return (
@@ -84,7 +59,7 @@ const Store = ({ navigation, route }) => {
         <Text className="mt-24 items-center" style={styles.shopName}>
           {" "}
           Girly Pop Shop {"\n"}
-          <Coins className="mb-24" numCoins={userCoins} />
+          {/* <Coins className="mb-24" numCoins={userCoins} /> */}${userCoins}
         </Text>
         {/* <Coins numCoins = {userCoins}/> */}
 

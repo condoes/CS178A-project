@@ -28,6 +28,7 @@ const Profile = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
   const [newUsername, setNewUsername] = useState(null);
   const [newEmail, setNewEmail] = useState(null);
+  const [newPassword, setNewPassword] = useState(null);
 
   const getUser = async () => {
     const { uid } = auth.currentUser;
@@ -44,50 +45,51 @@ const Profile = ({ route, navigation }) => {
 
   const handleUpdate = () => {
     const { uid } = auth.currentUser;
-    db.collection("users")
-      .doc(uid)
-      .update({
-        username: newUsername,
-        email: newEmail
-      });
-    // auth.currentUser
-    //   .updateProfile({
-    //     username: newUsername,
-    //     email: newEmail
-    //   })
-    //   .then(() => {
-    //     auth.currentUser.reload();
-    //   });
-
-    //console.log("uid: ", uid);
-    // console.log("curr username:", user && user.username);
-    // console.log("curr email:", user && user.email);
+    if (newUsername) {
+      db.collection("users")
+        .doc(uid)
+        .update({
+          username: newUsername,
+        });
+    }
+    if (newEmail) {
+      db.collection("users")
+        .doc(uid)
+        .updateEmai(newEmail);
+    }
+    if (newPassword) {
+      db.collection("users")
+        .doc(uid)
+        .updatePassword(newPassword);
+    }
   };
+  
+  // const [actionTriggered, setActionTriggered] = useState(""); // here we go
+  // const [modalVisible, setModalVisible] = useState(false);
+  
+  const handleSignout = () => {
+    auth.signOut()
+    .then(() => {
+      navigation.replace("Login")
+    })
+    .catch(error => alert(error.message))
+  }
 
-  const [actionTriggered, setActionTriggered] = useState(""); // here we go
+  // // const [modalState, setModalState] = useState(false);
+  // function signOut() {
+  //   setModalVisible(true);
+  //   setActionTriggered("SIGNOUT");
+  // }
+
+  // function changeEmail() {
+  //   setActionTriggered("EMAIL");
+  // }
+
+  // function changePassword() {
+  //   setActionTriggered("PASSWORD");
+  // }
+
   const [modalVisible, setModalVisible] = useState(false);
-
-  // const [modalState, setModalState] = useState(false);
-  function signOut() {
-    setModalVisible(true);
-    setActionTriggered("SIGNOUT");
-  }
-
-  function changeEmail() {
-    setActionTriggered("EMAIL");
-  }
-
-  function changePassword() {
-    setActionTriggered("PASSWORD");
-  }
-
-  // function yesOut(message) {
-  //   setModalState({state: "yes", message});
-  // }
-
-  // function noOut(message) {
-  //   setModalState({state: "no", message});
-  // }
 
   return (
     <View className="flex items-center justify-center">
@@ -156,8 +158,9 @@ const Profile = ({ route, navigation }) => {
               <TextInput
                 className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
                 placeholder="Password"
-                // value={"password"}
-                // onChangeText={(txt) => txt}
+                autoCorrect={false}
+                value={newPassword}
+                onChangeText={(txt) => setNewPassword(txt)}
               />
             </View>
             <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
@@ -191,7 +194,7 @@ const Profile = ({ route, navigation }) => {
 
             <Pressable
               style={[styles.button, styles.shadowProp]}
-              onPress={() => signOut()}
+              onPress={() => setModalVisible(!modalVisible)}
             >
               <Text className="text-3xl font-fredoka text-red m-1.5 text-center">
                 Sign Out
@@ -206,10 +209,10 @@ const Profile = ({ route, navigation }) => {
         transparent={true}
         visible={modalVisible}
         onClose={() => {
-          setActionTriggered("");
+          setModalVisible(!modalVisible);
         }}
       >
-        {actionTriggered === "SIGNOUT" ? (
+        
           <View style={styles.container}>
             <View style={styles.modalView}>
               <View className="flex flex-row items-center justify-center">
@@ -220,9 +223,7 @@ const Profile = ({ route, navigation }) => {
                 <Pressable
                   className="bg-[#D1EBCB] items-center justify-center"
                   style={styles.button}
-                  onPress={() => {
-                    navigation.navigate("Landing");
-                  }}
+                  onPress={handleSignout}
                 >
                   <Entypo
                     name="check"
@@ -236,7 +237,7 @@ const Profile = ({ route, navigation }) => {
                   className="bg-red items-center justify-center"
                   style={styles.button}
                   onPress={() => {
-                    navigation.navigate("TimerPick");
+                    setModalVisible(false);
                   }}
                 >
                   <Entypo
@@ -306,7 +307,7 @@ const Profile = ({ route, navigation }) => {
 
           </View> */}
           </View>
-        ) : null}
+        
       </Modal>
     </View>
   );
