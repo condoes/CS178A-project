@@ -41,11 +41,6 @@ function Routes() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="NamePet"
-          component={NamePet}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
           name="Landing"
           component={Landing}
           options={{ headerShown: false }}
