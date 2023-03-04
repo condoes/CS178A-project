@@ -126,25 +126,18 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
               Would you like to buy for {<Coins numCoins={cost} />} ?
             </Text>
 
-            <View style={styles.twoButtons}>
-              <TouchableOpacity
-                style={styles.yesButton}
-                onPress={() => {
-                  if (userCoins >= cost) {
-                    updateUser();
-                    setModalVisible(!modalVisible);
-                  } else {
-                    setModal2Visible(!modal2Visible);
-                  }
-                }}
-              >
-                <Entypo
-                  name="check"
-                  size={32}
-                  color="white"
-                  alignItems="center"
-                />
-              </TouchableOpacity>
+              <View style = {{flexDirection: "row"}}>
+                <TouchableOpacity style = {styles.yesButton} 
+                  onPress={()=> {
+                    if(userCoins >= cost){
+                      updateUser();
+                       setModalVisible(!modalVisible);
+                    }
+                    else{
+                      setModal2Visible(!modal2Visible);
+                    }
+                    }}>
+                  <Entypo  name="check" size={32} color="white" alignItems="center"/>
 
               <TouchableOpacity
                 style={styles.noButton}
@@ -207,10 +200,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     paddingBottom: 50
   },
-  twoButtons: {
-    flexDirection: "row"
-  },
-  downButton: {
+  downButton:{
     backgroundColor: "#4D558A",
     borderRadius: 42,
     elevation: 5,
