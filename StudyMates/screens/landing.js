@@ -19,13 +19,13 @@ import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 // import Routes from "../routes/Routes";
 // import { collection, doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import inventory from "../Components/inventory";
+// import inventory from "../Components/inventory";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 const Landing = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
   const [img, setImg] = useState(null);
-  const [openInventory,setInventoryVisible] = useState(false);
+  const [openInventory, setInventoryVisible] = useState(false);
 
   const getUser = async () => {
     const { uid } = auth.currentUser;
@@ -91,55 +91,82 @@ const Landing = ({ route, navigation }) => {
       </View>
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={[styles.roundButton, styles.shadowProp]}
-        onPress={() => setInventoryVisible(!openInventory)}>
-          <MaterialCommunityIcons name="treasure-chest" size={30} color="black" />
+        <TouchableOpacity
+          style={[styles.roundButton, styles.shadowProp]}
+          onPress={() => setInventoryVisible(!openInventory)}
+        >
+          <MaterialCommunityIcons
+            name="treasure-chest"
+            size={30}
+            color="black"
+          />
         </TouchableOpacity>
 
         {/* <GestureHandler style={{flex: 1}}
           onSwipeDown={ ()=> setInventoryVisible(!openInventory)}>  */}
 
-          <Modal animationType="slide" transparent = {true} visible = {openInventory} 
-          onRequestClose = {()=> setInventoryVisible(!openInventory)}>
-
-            <View className="flex flex-row" style = {styles.inventoryStyle}>
-              <Pressable onPress={()=> {setInventoryVisible(!openInventory);}} style={styles.closeButton}>
-                <Entypo name="chevron-down" size={40} color="white" alignItems="center"/>
-              </Pressable>
-              <Pressable style = {styles.toggleButtonBack}>
-                <View style = {styles.toggleButtons}>
-                  <TouchableOpacity style = {styles.foodButton}>
-                    <MaterialCommunityIcons name="food-apple-outline" size={40} color="white" />
-                  </TouchableOpacity>
-                  <TouchableOpacity style = {styles.clothesButton}>
-                    <MaterialCommunityIcons name="hanger" size={40} color="white" />
-                  </TouchableOpacity>
-                </View>
-              </Pressable>
-            </View>
-            <View style = {styles.inventoryView}>
-              <View style = {styles.innerInventory}>
-                <ScrollView horizontal = {true} alignItems="center"> 
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={openInventory}
+          onRequestClose={() => setInventoryVisible(!openInventory)}
+        >
+          <View className="flex flex-row" style={styles.inventoryStyle}>
+            <Pressable
+              onPress={() => {
+                setInventoryVisible(!openInventory);
+              }}
+              style={styles.closeButton}
+            >
+              <Entypo
+                name="chevron-down"
+                size={40}
+                color="white"
+                alignItems="center"
+              />
+            </Pressable>
+            <Pressable style={styles.toggleButtonBack}>
+              <View style={styles.toggleButtons}>
+                <TouchableOpacity style={styles.foodButton}>
+                  <MaterialCommunityIcons
+                    name="food-apple-outline"
+                    size={40}
+                    color="white"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.clothesButton}>
+                  <MaterialCommunityIcons
+                    name="hanger"
+                    size={40}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </View>
+            </Pressable>
+          </View>
+          <View style={styles.inventoryView}>
+            <View style={styles.innerInventory}>
+              <ScrollView horizontal={true} alignItems="center">
                 {/* DUMMY ITEMS. PUT GABYS COMPONENTS HERE */}
-                    <TouchableOpacity>
-                      <Image source={require("../assets/food/banana.png")}></Image>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image source={require("../assets/food/cherry.png")}></Image>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image source={require("../assets/food/kiwi.png")}></Image>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image source={require("../assets/food/waffles.png")}></Image>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image source={require("../assets/food/hotDog.png")}></Image>
-                    </TouchableOpacity>
-                </ScrollView>
-              </View>
-              </View>
-          </Modal>
+                <TouchableOpacity>
+                  <Image source={require("../assets/food/banana.png")}></Image>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image source={require("../assets/food/cherry.png")}></Image>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image source={require("../assets/food/kiwi.png")}></Image>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image source={require("../assets/food/waffles.png")}></Image>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image source={require("../assets/food/hotDog.png")}></Image>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
+          </View>
+        </Modal>
         {/* </GestureHandler> */}
 
         <TouchableOpacity
@@ -151,7 +178,7 @@ const Landing = ({ route, navigation }) => {
 
         <TouchableOpacity
           style={[styles.roundButton, styles.shadowProp]}
-          onPress={() => navigation.navigate("Store")}
+          onPress={() => navigation.navigate("Store", { user: user })}
         >
           <MaterialCommunityIcons
             name="storefront-outline"
@@ -159,14 +186,12 @@ const Landing = ({ route, navigation }) => {
             color="black"
           />
         </TouchableOpacity>
-
-        
       </View>
 
       <Image
-      className="z-[2] absolute top-[35%] right-[50%] w-[70%] h-[13%]"
-      source={require("../assets/clouds_1.png")}
-      resizeMode="contain"
+        className="z-[2] absolute top-[35%] right-[50%] w-[70%] h-[13%]"
+        source={require("../assets/clouds_1.png")}
+        resizeMode="contain"
       />
       <Image
         className="z-[2] absolute left-[50%] top-[10%] w-[57%] h-[13%]"
@@ -187,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     flex: 1,
-    zIndex: 1,
+    zIndex: 1
   },
   image: {
     flex: 1,
@@ -205,7 +230,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
     paddingLeft: 22,
     paddingRight: 22,
-    zIndex: 3,
+    zIndex: 3
   },
   topLeft: {
     alignItems: "flex-start"
@@ -216,7 +241,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "30%",
     right: "7%",
-    zIndex: 4,
+    zIndex: 4
   },
   buttonRow: {
     // backgroundColor: 'red',
@@ -225,7 +250,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     marginBottom: "10%",
-    zIndex: 3,
+    zIndex: 3
   },
   shadowProp: {
     shadowColor: "#00000",
@@ -240,7 +265,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     height: 56,
     width: 181,
-    zIndex: 3,
+    zIndex: 3
   },
   roundButton: {
     backgroundColor: "#E6E0FF",
@@ -251,87 +276,87 @@ const styles = StyleSheet.create({
     marginTop: 45,
     height: 56,
     width: 56,
-    zIndex: 3,
+    zIndex: 3
   },
   buttonText: {
     fontFamily: "WorkSansMedium",
     fontSize: 24,
     color: "#4D558A"
   },
-  inventoryStyle:{
-    marginTop: 'auto',
+  inventoryStyle: {
+    marginTop: "auto"
   },
-  inventoryView:{
-    backgroundColor:"#9F9FDC",
-    alignItems:"center",
+  inventoryView: {
+    backgroundColor: "#9F9FDC",
+    alignItems: "center",
     justifyContent: "center",
     fontFamily: "FredokaMedium",
-    height:'25%',
-    width: '100%',
+    height: "25%",
+    width: "100%"
     //marginTop: 'auto',
     //overflow: 'visible'
   },
-  innerInventory:{
-    backgroundColor:"#CBCBF7",
-    borderRadius:20,
+  innerInventory: {
+    backgroundColor: "#CBCBF7",
+    borderRadius: 20,
     //alignItems: "center",
     // justifyContent: "center",
-    height: '80%',
-    width:'90%',
+    height: "80%",
+    width: "90%"
   },
   // scrollView:{
   //   borderRadius:20,
   //   width:'100%',
   // },
-  closeButton:{
+  closeButton: {
     backgroundColor: "#9F9FDC",
     borderTopLeftRadius: 10,
-    borderTopRightRadius:10,
+    borderTopRightRadius: 10,
     height: 50,
-    width:'25%',
+    width: "25%",
     marginLeft: 20,
-    marginTop: 'auto',
+    marginTop: "auto",
     //marginTop: '100%',
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: "center",
+    justifyContent: "center"
   },
-  toggleButtonBack:{
+  toggleButtonBack: {
     backgroundColor: "transparent",
     borderTopLeftRadius: 10,
-    borderTopRightRadius:10,
+    borderTopRightRadius: 10,
     height: 50,
-    width:'40%',
-    marginLeft: 'auto',
-    marginRight:20,
+    width: "40%",
+    marginLeft: "auto",
+    marginRight: 20,
     //marginTop: 'auto',
-    alignItems:'center',
-    justifyContent:'flex-end',
+    alignItems: "center",
+    justifyContent: "flex-end"
   },
-  toggleButtons:{
-    flexDirection: 'row',
-    height:"100%",
-    width:"100%"
+  toggleButtons: {
+    flexDirection: "row",
+    height: "100%",
+    width: "100%"
   },
-  foodButton:{
-    backgroundColor:"#9F9FDC",
-    borderTopLeftRadius:10,
-    borderTopRightRadius:10,
+  foodButton: {
+    backgroundColor: "#9F9FDC",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 'auto',
-    height:'100%',
-    width:'49%',
+    marginRight: "auto",
+    height: "100%",
+    width: "49%"
   },
-  clothesButton:{
-    backgroundColor:"#9F9FDC",
-    borderTopRightRadius:10,
-    borderTopLeftRadius:10,
+  clothesButton: {
+    backgroundColor: "#9F9FDC",
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 'auto',
-    height:'100%',
-    width:'49%',
-  },
+    marginLeft: "auto",
+    height: "100%",
+    width: "49%"
+  }
 });
 
 export default Landing;
