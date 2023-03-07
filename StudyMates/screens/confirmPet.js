@@ -1,10 +1,35 @@
-import { React } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { React, useState } from "react";
+import { View, Text, Image, StyleSheet, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { auth, db } from "../firebase";
 
 const ConfirmPet = ({ route, navigation }) => {
   const { name, img, type } = route.params;
+  const [newName, setNewName] = useState(name);
+
+  const handlePetLog = () => {
+    const { uid } = auth.currentUser;
+    const pet = {
+      name: newName,
+      exp: 0,
+      level: 1,
+      userid: uid,
+      type: type
+    };
+    db.collection("pets")
+      .add(pet)
+      .then(documentReference => {
+        const petid = documentReference.id;
+        console.log("added pet with id: ", petid);
+        db.collection("users")
+          .doc(uid)
+          .update({ petid: petid });
+      });
+
+    navigation.navigate("Landing", { img: img });
+  };
+
   //   console.log("image:", img);
 
   return (
@@ -21,22 +46,22 @@ const ConfirmPet = ({ route, navigation }) => {
           className="w-2/3 font-fredoka bg-offwhite items-center rounded-xl mt-4"
           style={styles.shadowProp}
         >
-          <Text className="font-fredoka text-2xl mx-4 my-2 text-center">
-            {name}
-          </Text>
+          {/* <Text className="font-fredoka text-2xl mx-4 my-2 text-center"> */}
+          <TextInput
+            className="font-fredoka text-2xl mx-4 my-2 text-center"
+            defaultValue={name}
+            onChangeText={text => setNewName(text)}
+            value={newName}
+            maxLength={15}
+          />
+          {/* </Text> */}
         </View>
         <Image className="my-4" source={img} />
 
         <View style={styles.buttonContain}>
           <Pressable
             style={[styles.yesButton, styles.shadowProp]}
-            onPress={() =>
-              navigation.navigate("NamePet", {
-                name: name,
-                img: img,
-                type: type
-              })
-            }
+            onPress={handlePetLog}
           >
             <Text className="p-4 font-fredoka text-3xl">yes</Text>
           </Pressable>

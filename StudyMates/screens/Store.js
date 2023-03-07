@@ -1,71 +1,103 @@
 import { StoreContext } from "nativewind/dist/style-sheet";
-import { React, useState , useEffect} from "react";
-import { View, Text, StyleSheet, Pressable, Image, ImageBackground, TouchableOpacity,Modal} from "react-native";
+import { React, useState, useRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+  Modal
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import customButton from "../customButton";
-import { MaterialCommunityIcons, SimpleLineIcons, Ionicons, AntDesign , Entypo} from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  SimpleLineIcons,
+  Ionicons,
+  AntDesign,
+  Entypo
+} from "@expo/vector-icons";
 import { CurrentRenderContext } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
-import ShopItem from "../Components/shopItem"
+import ShopItem from "../Components/shopItem";
 import Coins from "../Components/coins";
 import { db, auth } from "../firebase";
 
-
-
-const Store = ({ navigation }) =>{
-  const [userCoins, setUserCoins] = useState(null);
-
-  const getUserCoins = async () => {
-    const { uid }  = auth.currentUser;
-    const userRef = db.collection("users").doc(uid);
-    const userDoc = await userRef.get();
-    const userData = userDoc.data();
-
-    setUserCoins(userData.coins);
+const Store = ({ navigation, route }) => {
+  const { user } = route.params;
+  const [userCoins, setUserCoins] = useState(user.coins);
+  console.log("coins:", userCoins);
+  const itemToShop = updateCoins => {
+    setUserCoins(updateCoins);
   };
-  useEffect(() => {
-    getUserCoins();
-  }, []);
-return (   
+
+  // const [value] = useCollection(collection(db, "users"), {
+  //   snapshotListenOptions: { includeMetadataChanges: true }
+  // });
+
+  useEffect(() => {}, [userCoins]);
+
+  // if (user !== undefined) {
+  return (
     <View>
+      <ImageBackground
+        source={require("../assets/shop.png")}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        {/* Back Button */}
+        <Pressable
+          className="mr-auto mt-10 mb-auto ml-5"
+          onPress={() => navigation.navigate("Landing")}
+        >
+          <AntDesign name="back" size={32} color="black" />
+        </Pressable>
 
-    <ImageBackground source={require('../assets/shop.png')} resizeMode="cover" style={styles.image}>
+        {/* Shop Name */}
+        <Text className="mt-24 items-center" style={styles.shopName}>
+          {" "}
+          Girly Pop Shop {"\n"}
+          {/* <Coins className="mb-24" numCoins={userCoins} /> */}${userCoins}
+        </Text>
+        {/* <Coins numCoins = {userCoins}/> */}
 
-      {/* Back Button */}
-      <Pressable
-      className="mr-auto mt-10 mb-auto ml-5"
-      onPress={() => navigation.navigate("Landing")}>
-        <AntDesign name="back" size={32} color="black" />
-      </Pressable>
-
-      {/* Shop Name */}
-      <Text className="mt-24 items-center" style={styles.shopName}> Girly Pop Shop {"\n"} 
-      <Coins className="mb-24" numCoins = {userCoins}/></Text>
-      {/* <Coins numCoins = {userCoins}/> */}
-
-      {/* SHELF 1 */}
-      <View style={styles.foodContainer}>
-        {/* <TouchableOpacity onPress={() => {setModalVisible(!modalVisible);}}>
+        {/* SHELF 1 */}
+        <View style={styles.foodContainer}>
+          {/* <TouchableOpacity onPress={() => {setModalVisible(!modalVisible);}}>
           <Image source={require('../assets/food/banana.png')}></Image>
         </TouchableOpacity> */}
 
-        <ShopItem id = {'banana'} />
-        <ShopItem id = {'cherry'} />
-        <ShopItem id = {'kiwi'} />
+          <ShopItem
+            id={"banana"}
+            userCoins={userCoins}
+            itemToShop={itemToShop}
+          />
+          <ShopItem
+            id={"cherry"}
+            userCoins={userCoins}
+            itemToShop={itemToShop}
+          />
+          <ShopItem id={"kiwi"} userCoins={userCoins} itemToShop={itemToShop} />
+        </View>
 
-      </View>
-    
-      {/* SHELF 2 */}
-      <View style={styles.foodContainer}>
+        {/* SHELF 2 */}
+        <View style={styles.foodContainer}>
+          <ShopItem
+            id={"waffles"}
+            userCoins={userCoins}
+            itemToShop={itemToShop}
+          />
+          <ShopItem
+            id={"hotDog"}
+            userCoins={userCoins}
+            itemToShop={itemToShop}
+          />
+        </View>
+      </ImageBackground>
 
-        <ShopItem id = {'waffles'} />
-        <ShopItem id = {'hotDog'} />
-
-      </View>
-
-    </ImageBackground>
-    
-    {/* <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -94,11 +126,10 @@ return (
           </View>
         </View>
     </Modal> */}
-
-
     </View>
-    );
+  );
 };
+// };
 
 const styles = StyleSheet.create({
   container: {
@@ -107,57 +138,57 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     paddingBottom: 50
   },
-  foodContainer:{
-    flex:1,
-    flexDirection:"row",
+  foodContainer: {
+    flex: 1,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingBottom:50
+    paddingBottom: 50
   },
   image: {
-    height:'100%',
-    width: '100%',
-  },  
-  shopName:{
+    height: "100%",
+    width: "100%"
+  },
+  shopName: {
     flex: 1,
     fontFamily: "FredokaMedium",
     fontSize: 50,
-    color: 'white',
-    textShadowOffset: {width: 2, height: 2},
-    textShadowColor:"black",
+    color: "white",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowColor: "black",
     textShadowRadius: 1,
     textAlign: "center"
-  }, 
-  modalView:{
+  },
+  modalView: {
     //backgroundColor: "#D1EBCB",
     backgroundColor: "#FFF2D4",
     borderColor: "#505050",
     borderRadius: 20,
     padding: 30,
-    alignItems:"center",
+    alignItems: "center",
     fontFamily: "FredokaMedium",
-    width:300
+    width: 300
   },
-  exitButton:{
+  exitButton: {
     backgroundColor: "#E6E0FF",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 100,
     padding: 10
   },
-  description:{
-    color:"black",
+  description: {
+    color: "black",
     fontFamily: "FredokaMedium",
-    textAlign:"center",
-    fontSize:18
+    textAlign: "center",
+    fontSize: 18
   },
-  button:{
-    borderRadius:42,
-    elevation:5,
+  button: {
+    borderRadius: 42,
+    elevation: 5,
     height: 50,
-    width:110,
+    width: 110,
     margin: 6,
-    marginTop:10
+    marginTop: 10
   }
 });
 
