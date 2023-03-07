@@ -42,6 +42,15 @@ const TimerScreen = ({ route, navigation }) => {
       });
   };
 
+  const handlePomoComp = () => {
+    // console.log("time/exp: ", time);
+    db.collection("users")
+      .doc(auth.currentUser.uid)
+      .update({
+        pomoCycles: increment(1),
+      });
+  };
+
   return (
     <View className="flex items-center justify-center">
       <LinearGradient
@@ -244,7 +253,7 @@ const TimerScreen = ({ route, navigation }) => {
               <TouchableOpacity style={[styles.buttonYellow, styles.shadowProp]}
               onPress={() => {
                 navigation.navigate("Landing")
-                {handleCoins((pomoT * 4));}}}
+                {handleCoins((pomoT * 4)); handlePomoComp();}}}
               >
                 <Text style={styles.buttonTextStyle}>return home</Text>
               </TouchableOpacity>
@@ -256,7 +265,7 @@ const TimerScreen = ({ route, navigation }) => {
                   setKey(key => !key);
                   setCycleName('pomodoro');
                   incCycleCount(1);
-                  {handleCoins((pomoT * 4));}
+                  {handleCoins((pomoT * 4)); handlePomoComp();}
                 }}
               >
                 <Text style={styles.buttonTextStyle}>continue</Text>

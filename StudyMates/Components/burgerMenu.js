@@ -16,7 +16,7 @@ const BurgerMenu = ({ navigation }) => {
 
                 <Pressable
                 style={({pressed}) => [styles.menuItem]}
-                onPress={() => {navigation.navigate("TimerPick"); setMenu(!openMenu);}}>
+                onPress={() => {navigation.navigate("Analytics"); setMenu(!openMenu);}}>
                     <Ionicons name="bar-chart-outline" size={35} color="#505050"/>
                 </Pressable>
 
