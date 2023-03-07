@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import FadeInOut from 'react-native-fade-in-out';
 import {
   View,
   Text,
@@ -22,13 +23,12 @@ import {
 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { db, auth } from "../firebase";
-import firebase from "../firebase";
 
 const Profile = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
   const [newUsername, setNewUsername] = useState(null);
-  const [newEmail, setNewEmail] = useState(null);
-  const [newPassword, setNewPassword] = useState(null);
+  // const [newEmail, setNewEmail] = useState(null);
+  // const [newPassword, setNewPassword] = useState(null);
 
   const getUser = async () => {
     const { uid } = auth.currentUser;
@@ -49,45 +49,27 @@ const Profile = ({ route, navigation }) => {
       db.collection("users")
         .doc(uid)
         .update({
-          username: newUsername,
+          username: newUsername
         });
-    }
-    if (newEmail) {
-      db.collection("users")
-        .doc(uid)
-        .updateEmai(newEmail);
-    }
-    if (newPassword) {
-      db.collection("users")
-        .doc(uid)
-        .updatePassword(newPassword);
+      getUser();
+      console.log('username updated')
     }
   };
-  
-  // const [actionTriggered, setActionTriggered] = useState(""); // here we go
-  // const [modalVisible, setModalVisible] = useState(false);
-  
+
   const handleSignout = () => {
-    auth.signOut()
+    auth.signOut(auth)
     .then(() => {
-      navigation.replace("Login")
+      navigation.replace("Login");
+      console.log("User signed out!");
     })
     .catch(error => alert(error.message))
   }
 
-  // // const [modalState, setModalState] = useState(false);
-  // function signOut() {
-  //   setModalVisible(true);
-  //   setActionTriggered("SIGNOUT");
-  // }
-
-  // function changeEmail() {
-  //   setActionTriggered("EMAIL");
-  // }
-
-  // function changePassword() {
-  //   setActionTriggered("PASSWORD");
-  // }
+  const handlePasswordChange = () => {
+    auth.sendPasswordResetEmail(user && user.email)
+    .catch(error => alert(error.message))
+    console.log('password change email sent')
+  }
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -111,8 +93,11 @@ const Profile = ({ route, navigation }) => {
           </Text>
         </View>
 
-        <View style={styles.infoContainer}>
-          <View style={styles.infoView}>
+        
+        {/*  */}
+
+        <View style={styles.infoContainer}> 
+          <View style={styles.infoView}> 
             {/* <View>
               <Text className="text-6xl font-fredoka text-black m-1.5 text-center"> 
               {user && user.totalStudy}
@@ -133,28 +118,46 @@ const Profile = ({ route, navigation }) => {
                 autoCorrect={false}
                 defaultValue={user && user.username}
                 value={newUsername}
+                maxLength={10}
                 onChangeText={txt => setNewUsername(txt)}
               />
             </View>
-            <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-              Change Username
-            </Text>
+              <View style={styles.updateRow}>
+                <TouchableOpacity
+                  style={[styles.updatebutton, styles.shadowProp]}
+                  onPress={handleUpdate}
+                >
+                  <Text className="text-1xl font-fredoka text-white m-1.5 text-center">
+                    update username
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            {/* <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
+              change username
+            </Text> */}
 
-            <View>
-              <TextInput
-                className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
+            <View style={styles.emailcontainer}>
+              {/* <TextInput
+                className="text-1xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
                 placeholder="Email"
                 autoCorrect={false}
                 defaultValue={user && user.email}
                 value={newEmail}
-                onChangeText={txt => setNewEmail(txt)}
-              />
+                textContentType="emailAddress"
+                // onChangeText={txt => setNewEmail(txt)}
+              /> */}
+              <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
+                your email:
+              </Text>
+              <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
+                {user && user.email}
+              </Text>
             </View>
-            <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-              Change Email
-            </Text>
+            {/* <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
+              change email
+            </Text> */}
 
-            <View>
+            {/* <View>
               <TextInput
                 className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
                 placeholder="Password"
@@ -165,7 +168,16 @@ const Profile = ({ route, navigation }) => {
             </View>
             <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
               Change Password
-            </Text>
+            </Text> */}
+            <View style={styles.buttomRow}>
+              <TouchableOpacity
+                style={[styles.longbutton, styles.shadowProp]}
+                onPress={handlePasswordChange}>
+                <Text className="text-3xl font-fredoka text-white m-1.5 text-center">
+                  change password
+                </Text>
+              </TouchableOpacity> 
+            </View>
             {/* <Pressable
               style={[styles.button, styles.shadowProp]}
               onPress={() => changeEmail()}
@@ -183,23 +195,18 @@ const Profile = ({ route, navigation }) => {
                 Change Password
               </Text>
             </Pressable> */}
-            <Pressable
-              style={[styles.button, styles.shadowProp]}
-              onPress={handleUpdate}
-            >
-              <Text className="text-3xl font-fredoka text-black m-1.5 text-center">
-                Update Info
-              </Text>
-            </Pressable>
 
-            <Pressable
-              style={[styles.button, styles.shadowProp]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text className="text-3xl font-fredoka text-red m-1.5 text-center">
-                Sign Out
-              </Text>
-            </Pressable>
+            <View style={styles.buttomRow}>
+              <TouchableOpacity
+                style={[styles.button, styles.shadowProp]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text className="text-3xl font-fredoka text-red m-1.5 text-center">
+                  sign out
+                </Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
         </View>
       </LinearGradient>
@@ -215,14 +222,18 @@ const Profile = ({ route, navigation }) => {
         
           <View style={styles.container}>
             <View style={styles.modalView}>
+              
               <View className="flex flex-row items-center justify-center">
                 <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
-                  Are you sure you want to sign out? :T
+                  are you sure you want to sign out? :T {'\n'}
                 </Text>
 
-                <Pressable
+              </View>
+
+              <View className="flex flex-row items-center justify-center">
+                <TouchableOpacity
                   className="bg-[#D1EBCB] items-center justify-center"
-                  style={styles.button}
+                  style={styles.smallbutton}
                   onPress={handleSignout}
                 >
                   <Entypo
@@ -231,11 +242,11 @@ const Profile = ({ route, navigation }) => {
                     color="white"
                     alignItems="center"
                   />
-                </Pressable>
-
-                <Pressable
+                </TouchableOpacity>
+                <Text>            </Text>
+                <TouchableOpacity
                   className="bg-red items-center justify-center"
-                  style={styles.button}
+                  style={styles.smallbutton}
                   onPress={() => {
                     setModalVisible(false);
                   }}
@@ -246,8 +257,9 @@ const Profile = ({ route, navigation }) => {
                     color="white"
                     alignItems="center"
                   />
-                </Pressable>
+                </TouchableOpacity>
               </View>
+
             </View>
 
             {/* </View> :
@@ -320,19 +332,35 @@ const styles = StyleSheet.create({
     flex: 1
   },
   topRow: {
-    position: "absolute",
-    top: "10%"
+    paddingTop: 10,
+    paddingBottom: 1
   },
-  bottomRow: {
-    position: "absolute",
-    bottom: "30%"
+  buttomRow: {
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    paddingTop: 30,
+    paddingBottom: 1
+  },
+  updateRow: {
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    paddingTop: 10,
+    paddingBottom: 40
   },
   infoContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingTop: 150,
+    top: "15%",
     paddingBottom: 250
+  },
+  emailcontainer: {
+    borderRadius: 20,
+    backgroundColor: "#fee7b1",
+    alignItems: "center",
+    paddingBottom: 10,
+    paddingTop: 10,
+    width: 280
   },
   container: {
     flex: 1,
@@ -353,7 +381,8 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: "center",
     fontFamily: "FredokaMedium",
-    width: 300
+    width: 320,
+    height: 550
   },
   modalView: {
     backgroundColor: "#C3C3F0",
@@ -371,7 +400,47 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#f2f2f2",
     paddingBottom: 5
-  }
+  },
+  button: {
+    backgroundColor: "#E6E0FF",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 24,
+    height: 56,
+    width: 151,
+    zIndex: 3,
+  },
+  longbutton: {
+    backgroundColor: "#E6E0FF",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 24,
+    height: 56,
+    width: 281,
+    zIndex: 3
+  },
+  smallbutton: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 24,
+    height: 56,
+    width: 81,
+    zIndex: 3
+  },
+  updatebutton: {
+    backgroundColor: "#E6E0FF",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 24,
+    height: 36,
+    width: 150,
+    zIndex: 3
+  },
+  buttonText: {
+    fontFamily: "Fredoka",
+    fontSize: 24,
+    color: "#4D558A"
+  },
 });
 
 export default Profile;
