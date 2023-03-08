@@ -79,8 +79,7 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
 
   const updateUser = () => {
     const { uid } = auth.currentUser;
-    userCoins = userCoins - cost;
-    itemToShop(userCoins);
+    itemToShop(userCoins - cost);
     db.collection("users")
       .doc(uid)
       .update({ coins: userCoins - cost });

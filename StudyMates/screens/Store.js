@@ -26,8 +26,8 @@ import Coins from "../Components/coins";
 import { db, auth } from "../firebase";
 
 const Store = ({ navigation, route }) => {
-  const { user } = route.params;
-  const [userCoins, setUserCoins] = useState(user.coins);
+  const { coins } = route.params;
+  const [userCoins, setUserCoins] = useState(coins);
   console.log("coins:", userCoins);
   const itemToShop = updateCoins => {
     setUserCoins(updateCoins);
@@ -36,8 +36,6 @@ const Store = ({ navigation, route }) => {
   // const [value] = useCollection(collection(db, "users"), {
   //   snapshotListenOptions: { includeMetadataChanges: true }
   // });
-
-  useEffect(() => {}, [userCoins]);
 
   // if (user !== undefined) {
   return (
