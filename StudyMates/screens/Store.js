@@ -28,7 +28,6 @@ import { db, auth } from "../firebase";
 const Store = ({ navigation, route }) => {
   const { user } = route.params;
   const [userCoins, setUserCoins] = useState(user.coins);
-  console.log("coins:", userCoins);
   const itemToShop = updateCoins => {
     setUserCoins(updateCoins);
   };
