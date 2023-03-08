@@ -19,10 +19,9 @@ import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 // import Routes from "../routes/Routes";
 // import { collection, doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import FadeInOut from 'react-native-fade-in-out';
+import FadeInOut from "react-native-fade-in-out";
 // import inventory from "../Components/inventory";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
-
 
 const Landing = ({ route, navigation }) => {
   const [uid, getUid] = useState(null);
@@ -32,69 +31,48 @@ const Landing = ({ route, navigation }) => {
   const [welcome, setWelcome] = useState(true);
   const [openInventory, setInventoryVisible] = useState(false);
 
-  const getUser = async () => {
-    const { uid } = auth.currentUser;
-    // Discard fetch when user ID not defined
-    if (!uid) return
-    
-    const userRef = db.collection("users").doc(uid);
-    const doc = await userRef.get();
-    const userData = doc.data();
-    setUser(userData); 
-    console.log(userData);
-
-    const petid = userData.petid;
-    // console.log("user pet id:", petid);
-
+  const getPet = async petid => {
     const petRef = db.collection("pets").doc(petid);
-
     const petDoc = await petRef.get();
-    const petData = petDoc.data();
-    setPet(petData); 
 
-    console.log("pet type", petData.type);
+    const petData = petDoc.data();
+    setPet(petData);
     petData.type === "fox"
       ? setImg(require("../assets/pinkFox.png"))
       : petData.type === "tiger"
       ? setImg(require("../assets/redTiger.png"))
       : setImg(require("../assets/greenHyena2.png"));
+
+    console.log("pet type", petData.type);
   };
 
   useEffect(() => {
-    setWelcome(true)
+    setWelcome(true);
     setTimeout(() => {
-      setWelcome(false)
-    }, 5000)
-  }, [])
+      setWelcome(false);
+    }, 5000);
+    //console.log(user);
+    const { uid } = auth.currentUser;
+    if (!uid) return;
 
-  useEffect(() => {
-    getUser();
-    // const { uid } = auth.currentUser;
-    // if (!uid) return;
+    console.log("user id: ", uid);
 
-    // console.log("user id: ", uid);
+    const userSub = db
+      .collection("users")
+      .doc(uid)
+      .onSnapshot(doc => {
+        // includeMetadataChanges: true;
+        setUser(doc.data());
+        if (pet === null) {
+          getPet(doc.data().petid);
+        }
+      });
 
-    // const userSub = db.collection("users")
-    // .doc(uid)
-    // .onSnapshot(doc => {
-    //   setUser(doc.data());
-    // });
-    // console.log("cur pet: ", user && user.petid);
+    console.log(user);
 
-    // const petSub = db.collection("pets")
-    // .doc(user && user.petid)
-    // .onSnapshot(doc => {
-    //   setPet(doc.data());
-    // });
-    // console.log("pet type: ", pet && pet.type);
-
-    // (pet && pet.type) === "fox"
-    //   ? setImg(require("../assets/pinkFox.png"))
-    //   : (pet && pet.type) === "tiger"
-    //   ? setImg(require("../assets/redTiger.png"))
-    //   : setImg(require("../assets/greenHyena2.png"));
-
-    // return () => { userSub(); petSub(); }
+    return () => {
+      userSub;
+    };
   }, []);
 
   return (
@@ -109,8 +87,10 @@ const Landing = ({ route, navigation }) => {
           <Text className="text-3xl font-fredoka text-white m-1.5">
             {pet && pet.name}
           </Text>
- 
-          <LifeBar percent={(user && user.exp) > 0? (user && user.exp)/100 : 0.1} />
+
+          <LifeBar
+            percent={(user && user.exp) > 0 ? (user && user.exp) / 100 : 0.1}
+          />
           {/* {console.log("user pet id:", user.totalStudy)} */}
           <Coins numCoins={user && user.coins} />
         </View>
@@ -120,7 +100,6 @@ const Landing = ({ route, navigation }) => {
         </View>
       </View>
 
-      
       <View className="z-[3] flex flex-end justify-start items-center">
         <View>
           <FadeInOut visible={welcome} duration={2500}>
@@ -135,8 +114,7 @@ const Landing = ({ route, navigation }) => {
           <Image source={img} />
         </View>
       </View>
-        
-    
+
       <View style={styles.buttonRow}>
         <TouchableOpacity
           style={[styles.roundButton, styles.shadowProp]}
@@ -225,7 +203,9 @@ const Landing = ({ route, navigation }) => {
 
         <TouchableOpacity
           style={[styles.roundButton, styles.shadowProp]}
-          onPress={() => navigation.navigate("Store", { user: user })}
+          onPress={() =>
+            navigation.navigate("Store", { coins: user && user.coins })
+          }
         >
           <MaterialCommunityIcons
             name="storefront-outline"
@@ -277,7 +257,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
     paddingLeft: 22,
     paddingRight: 22,
-    zIndex: 6,
+    zIndex: 6
   },
   topLeft: {
     alignItems: "flex-start"
@@ -288,7 +268,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "30%",
     right: "7%",
-    zIndex: 6,
+    zIndex: 6
   },
   buttonRow: {
     // backgroundColor: 'red',
