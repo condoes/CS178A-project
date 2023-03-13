@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from "react";
-import FadeInOut from 'react-native-fade-in-out';
 import {
   View,
   Text,
@@ -67,11 +66,13 @@ const Profile = ({ route, navigation }) => {
 
   const handlePasswordChange = () => {
     auth.sendPasswordResetEmail(user && user.email)
+    .then(setModal2Visible(false))
     .catch(error => alert(error.message))
     console.log('password change email sent')
   }
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modal2Visible, setModal2Visible] = useState(false);
 
   return (
     <View className="flex items-center justify-center">
@@ -98,19 +99,7 @@ const Profile = ({ route, navigation }) => {
 
         <View style={styles.infoContainer}> 
           <View style={styles.infoView}> 
-            {/* <View>
-              <Text className="text-6xl font-fredoka text-black m-1.5 text-center"> 
-              {user && user.totalStudy}
-              </Text>
-              <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
-                Total Hours Studied
-              </Text>
 
-              <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-                Email: {user && user.email}
-              </Text>
-
-            </View> */}
             <View>
               <TextInput
                 className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
@@ -132,20 +121,8 @@ const Profile = ({ route, navigation }) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-            {/* <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-              change username
-            </Text> */}
 
             <View style={styles.emailcontainer}>
-              {/* <TextInput
-                className="text-1xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
-                placeholder="Email"
-                autoCorrect={false}
-                defaultValue={user && user.email}
-                value={newEmail}
-                textContentType="emailAddress"
-                // onChangeText={txt => setNewEmail(txt)}
-              /> */}
               <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
                 your email:
               </Text>
@@ -153,48 +130,16 @@ const Profile = ({ route, navigation }) => {
                 {user && user.email}
               </Text>
             </View>
-            {/* <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-              change email
-            </Text> */}
 
-            {/* <View>
-              <TextInput
-                className="text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-1/2 bg-tan/25"
-                placeholder="Password"
-                autoCorrect={false}
-                value={newPassword}
-                onChangeText={(txt) => setNewPassword(txt)}
-              />
-            </View>
-            <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-              Change Password
-            </Text> */}
             <View style={styles.buttomRow}>
               <TouchableOpacity
                 style={[styles.longbutton, styles.shadowProp]}
-                onPress={handlePasswordChange}>
+                onPress={() => setModal2Visible(!modal2Visible)}>
                 <Text className="text-3xl font-fredoka text-white m-1.5 text-center">
                   change password
                 </Text>
               </TouchableOpacity> 
             </View>
-            {/* <Pressable
-              style={[styles.button, styles.shadowProp]}
-              onPress={() => changeEmail()}
-            >
-              <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-                Change Email
-              </Text>
-            </Pressable>
-
-            <Pressable
-              style={[styles.button, styles.shadowProp]}
-              onPress={() => changePassword()}
-            >
-              <Text className="text-1xl font-fredoka text-black m-1.5 text-center">
-                Change Password
-              </Text>
-            </Pressable> */}
 
             <View style={styles.buttomRow}>
               <TouchableOpacity
@@ -262,65 +207,67 @@ const Profile = ({ route, navigation }) => {
 
             </View>
 
-            {/* </View> :
 
-          actionTriggered === 'EMAIL' ?
-          <View style={styles.container}>    
 
+          </View>
+        
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modal2Visible}
+        onClose={() => {
+          setModalVisible(!modal2Visible);
+        }}
+      >
+        
+          <View style={styles.container}>
             <View style={styles.modalView}>
+              
+              <View className="flex flex-row items-center justify-center">
+                <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
+                  do you want to change your password? {'\n'}
+                </Text>
 
-              <View className="flex flex-row items-center justify-center"> 
-                  <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
-                    Are you sure you want to sign out? :T
-                  </Text>
-                  
-                  <Pressable 
-                  className = "bg-[#D1EBCB] items-center justify-center" 
-                  style = {styles.button} 
-                  onPress={()=> {navigation.navigate("Landing")}}>
-                    <Entypo  name="check" size={32} color="white" alignItems="center"/>
-                  </Pressable>
+              </View>
 
-                  <Pressable 
-                  className = "bg-red items-center justify-center" 
-                  style = {styles.button} 
-                  onPress={()=> {navigation.navigate("Landing")}}>
-                    <Entypo name="cross" size={32} color="white" alignItems="center"/>
-                  </Pressable>
+              <View className="flex flex-row items-center justify-center">
+                <TouchableOpacity
+                  className="bg-[#D1EBCB] items-center justify-center"
+                  style={styles.smallbutton}
+                  onPress={handlePasswordChange}
+                >
+                  <Entypo
+                    name="check"
+                    size={32}
+                    color="white"
+                    alignItems="center"
+                  />
+                </TouchableOpacity>
+                <Text>            </Text>
+                <TouchableOpacity
+                  className="bg-red items-center justify-center"
+                  style={styles.smallbutton}
+                  onPress={() => {
+                    setModal2Visible(false);
+                  }}
+                >
+                  <Entypo
+                    name="cross"
+                    size={32}
+                    color="white"
+                    alignItems="center"
+                  />
+                </TouchableOpacity>
               </View>
 
             </View>
 
-          </View> :
-
-          actionTriggered === 'PASSWORD' ?
-          <View style={styles.container}>    
-
-          <View style={styles.modalView}>
-
-            <View className="flex flex-row items-center justify-center"> 
-                <Text className="text-2xl font-fredoka text-black m-1.5 text-center">
-                  Are you sure you want to sign out? :T
-                </Text>
-                
-                <Pressable 
-                className = "bg-[#D1EBCB] items-center justify-center" 
-                style = {styles.button} 
-                onPress={()=> {navigation.navigate("Landing")}}>
-                  <Entypo  name="check" size={32} color="white" alignItems="center"/>
-                </Pressable>
-                <Pressable 
-                className = "bg-red items-center justify-center" 
-                style = {styles.button} 
-                onPress={()=> {navigation.navigate("Landing")}}>
-                  <Entypo name="cross" size={32} color="white" alignItems="center"/>
-                </Pressable>
-            </View>
-
-          </View> */}
           </View>
         
       </Modal>
+
     </View>
   );
 };
