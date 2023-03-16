@@ -43,7 +43,7 @@ const Register = ({ route, navigation }) => {
           placeholder="username"
           onChangeText={text => setUsername(text)}
           value={username}
-          maxLength={15}
+          maxLength={10}
         />
         <TextInput
           className="mt-2 text-2xl border border-1 border-darkgray/50 font-worksans p-2 rounded-xl w-3/5 bg-tan/25"
