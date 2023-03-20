@@ -34,7 +34,7 @@ const Landing = ({ route, navigation }) => {
   const [welcome, setWelcome] = useState(true);
   const [openInventory, setInventoryVisible] = useState(false);
   const [fruits, setFruits] = useState([]);
-  // const [inv, setInv] = userS
+  const [inv, setInv] = useState([]);
 
   const getPet = async petid => {
     const petRef = db.collection("pets").doc(petid);
@@ -71,26 +71,35 @@ const Landing = ({ route, navigation }) => {
         if (pet === null) {
           getPet(doc.data().petid);
         }
+        setFruits([
+          {key: 'banana', amount: (doc.data().inventory2.banana)},
+          {key: 'cherry', amount: (doc.data().inventory2.cherry)},
+          {key: 'hotDog', amount: (doc.data().inventory2.hotDog)},
+          {key: 'kiwi', amount: (doc.data().inventory2.kiwi)},
+          {key: 'waffles', amount: (doc.data().inventory2.waffles)}
+        ]);
       });
 
-    // console.log(user);
+    // console.log(user.username);
 
-    setFruits([
-          {key: 'banana', amount: user.inventory2.banana},
-          {key: 'cherry', amount: user.inventory2.cherry},
-          {key: 'hotDog', amount: user.inventory2.hotDog},
-          {key: 'kiwi', amount: user.inventory2.kiwi},
-          {key: 'waffles', amount: user.inventory2.waffles}
-        ])
+    // setInv(user.inventory2);
+
+    // setFruitAmount();
 
     return () => {
       userSub;
     };
   }, []);
 
-  // function setFruitAmount(input) {
-  //   if (input ===)
-  // }
+  function setFruitAmount() {
+    setFruits([
+          {key: 'banana', amount: (user.inventory2 && user.inventory2.banana)},
+          {key: 'cherry', amount: (user.inventory2 && user.inventory2.cherry)},
+          {key: 'hotDog', amount: (user.inventory2 && user.inventory2.hotDog)},
+          {key: 'kiwi', amount: (user.inventory2 && user.inventory2.kiwi)},
+          {key: 'waffles', amount: (user.inventory2 && user.inventory2.waffles)}
+        ]);
+  }
 
   return (
     <LinearGradient

@@ -53,7 +53,13 @@ const InventoryItem = (props) => {
         {display?
             <View style={styles.container}>
                 <TouchableOpacity style={styles.fruit}
-                onPress={() => {updateUser(); decAmount(); if(amount===0) {setDisplay(false);}}}>
+                onPress={() => {updateUser(); 
+                if(amount == 1) {
+                    setDisplay(false);
+                } else {
+                    decAmount();
+                }
+                }}>
                     {/* {console.log(item)} */}
                     <Image source={item}
                     resizeMode="cover"/>
