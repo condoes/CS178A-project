@@ -38,7 +38,7 @@ const NamePet = ({ route, navigation }) => {
           .update({ petid: petid });
       });
 
-    navigation.navigate("Landing", { img: img });
+    navigation.navigate("Tutorial", { img: img });
   };
 
   return (
