@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  FlatList,
   ImageBackground,
   useContext,
   TouchableOpacity,
@@ -22,6 +23,8 @@ import { db, auth } from "../firebase";
 import FadeInOut from "react-native-fade-in-out";
 // import inventory from "../Components/inventory";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
+import InventoryItem from "../Components/inventoryItem";
+import { getKey } from "@firebase/firestore";
 
 const Landing = ({ route, navigation }) => {
   const [uid, getUid] = useState(null);
@@ -30,6 +33,8 @@ const Landing = ({ route, navigation }) => {
   const [pet, setPet] = useState(null);
   const [welcome, setWelcome] = useState(true);
   const [openInventory, setInventoryVisible] = useState(false);
+  const [fruits, setFruits] = useState([]);
+  // const [inv, setInv] = userS
 
   const getPet = async petid => {
     const petRef = db.collection("pets").doc(petid);
@@ -68,12 +73,24 @@ const Landing = ({ route, navigation }) => {
         }
       });
 
-    console.log(user);
+    // console.log(user);
+
+    setFruits([
+          {key: 'banana', amount: user.inventory2.banana},
+          {key: 'cherry', amount: user.inventory2.cherry},
+          {key: 'hotDog', amount: user.inventory2.hotDog},
+          {key: 'kiwi', amount: user.inventory2.kiwi},
+          {key: 'waffles', amount: user.inventory2.waffles}
+        ])
 
     return () => {
       userSub;
     };
   }, []);
+
+  // function setFruitAmount(input) {
+  //   if (input ===)
+  // }
 
   return (
     <LinearGradient
@@ -171,24 +188,24 @@ const Landing = ({ route, navigation }) => {
           </View>
           <View style={styles.inventoryView}>
             <View style={styles.innerInventory}>
-              <ScrollView horizontal={true} alignItems="center">
+              {/* <ScrollView horizontal={true} > */}
+                <FlatList
+                  style={{paddingRight: 100}}
+                  horizontal={true}
+                  data={fruits}
+                  renderItem={({item}) => 
+                  // console.log(item.amount)
+                  <InventoryItem amount={item.amount} item={item.key}></InventoryItem>
+                }/>
+                {/* // <Text style={styles.buttonText}>{item.key}</Text> */}
                 {/* DUMMY ITEMS. PUT GABYS COMPONENTS HERE */}
-                <TouchableOpacity>
-                  <Image source={require("../assets/food/banana.png")}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image source={require("../assets/food/cherry.png")}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image source={require("../assets/food/kiwi.png")}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image source={require("../assets/food/waffles.png")}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image source={require("../assets/food/hotDog.png")}></Image>
-                </TouchableOpacity>
-              </ScrollView>
+
+                {/* <InventoryItem amount={10} item="cherry"></InventoryItem>
+                <InventoryItem amount={3} item="banana"></InventoryItem>
+                <InventoryItem amount={10} item="kiwi"></InventoryItem>
+                <InventoryItem amount={3} item="waffles"></InventoryItem>
+                <InventoryItem amount={10} item="hotDog"></InventoryItem> */}
+              {/* </ScrollView> */}
             </View>
           </View>
         </Modal>

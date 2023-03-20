@@ -26,6 +26,7 @@ import "firebase/firestore";
 import Coins from "./coins";
 import { array } from "prop-types";
 import { FieldValue, Firestore } from "firebase/firestore";
+import { increment } from "@firebase/firestore";
 
 const ShopItem = ({ id, userCoins, itemToShop }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -86,9 +87,14 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
     // db.collection("users").doc(uid).update({
     //   inventory: firebase.firestore.FieldValue.arrayUnion('cherry')
     // });
+    var inventoryUpdate = {};
+    inventoryUpdate[`inventory2.${item}`] = increment(1);
+
     db.collection("users")
       .doc(uid)
-      .update({ inventory: firebase.firestore.FieldValue.arrayUnion(item) });
+      .update(inventoryUpdate);
+      // .update({ inventory: firebase.firestore.FieldValue.arrayUnion(item) });
+
   };
 
   useEffect(() => {

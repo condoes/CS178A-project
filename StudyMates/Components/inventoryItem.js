@@ -7,12 +7,32 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import {increment} from "@firebase/firestore";
+import { db, auth } from "../firebase";
 
 const InventoryItem = (props) => {
     const [amount, setAmount] = useState(props.amount);
     const [item, setItem] = useState(null);
+    const [display, setDisplay] = useState(true);
+
+    const updateUser = () => {
+        const { uid } = auth.currentUser;
+
+        var inventoryUpdate = {};
+        inventoryUpdate[`inventory2.${props.item}`] = increment(-1);
+
+        db.collection("users")
+        .doc(uid)
+        .update(inventoryUpdate);
+    };
    
     useEffect(() => {
+        if (props.amount === undefined) {
+            setDisplay(false);
+        } 
+        if (props.amount <= 0) {
+            setDisplay(false);
+        }  
         props.item === "cherry" ? setItem(require("../assets/food/cherry.png"))
         : props.item === "banana" ? setItem(require("../assets/food/banana.png"))
         : props.item === "hotDog" ? setItem(require("../assets/food/hotDog.png"))
@@ -24,27 +44,31 @@ const InventoryItem = (props) => {
         if (amount > 0) {
             setAmount(amount-1);
         } else {
-            // turn red bc 0?
+            setDisplay(false);
         }
     };
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.fruit}
-            onPress={() => decAmount(amount-1)}>
-                {/* {console.log(item)} */}
-                <Image source={item}
-                resizeMode="cover"/>
-            </TouchableOpacity>
+        <View>
+        {display?
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.fruit}
+                onPress={() => {updateUser(); decAmount(); if(amount===0) {setDisplay(false);}}}>
+                    {/* {console.log(item)} */}
+                    <Image source={item}
+                    resizeMode="cover"/>
+                </TouchableOpacity>
 
-            {/* <Pressable style={styles.amountContainer}
-            onPress={() => decAmount(amount-1)}> */}
-            <View style={styles.amountContainer} >
-               <Text className="text-2xl"style={styles.amountText}>
-                    x{amount}
-                </Text>
-            </View>
-            {/* </Pressable> */}
+                {/* <Pressable style={styles.amountContainer}
+                onPress={() => decAmount(amount-1)}> */}
+                <View style={styles.amountContainer} >
+                <Text className="text-2xl"style={styles.amountText}>
+                        x{amount}
+                    </Text>
+                </View>
+                {/* </Pressable> */}
+            </View> 
+        :null}
         </View>
     );
 };
@@ -52,10 +76,13 @@ const InventoryItem = (props) => {
 const styles = StyleSheet.create({
     container: {
         zIndex: 1,
+        marginHorizontal: 30,
+        marginTop: 40,
     },
     fruit: {
         zIndex: 2,
         position: 'absolute',
+        marginBottom: 10,
     },
     amountContainer:{
         backgroundColor: 'rgba(250,250,250, 0.75)',
@@ -66,7 +93,7 @@ const styles = StyleSheet.create({
         borderRadius: '100%',
         flexDirection: 'row',
         zIndex: 3,
-        top: '11%',
+        top: '111%',
         left: '110%',
     },
     amountText: {
