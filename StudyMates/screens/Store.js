@@ -141,11 +141,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingBottom: 50
+    paddingBottom: 50,
+    paddingRight:'5%'
   },
   image: {
     height: "100%",
-    width: "100%"
+    width: "100%",
   },
   shopName: {
     flex: 1,

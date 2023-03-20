@@ -25,7 +25,7 @@ import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import Coins from "./coins";
 import { array } from "prop-types";
-import { FieldValue, Firestore } from "firebase/firestore";
+import { FieldValue, Firestore, increment, where } from "firebase/firestore";
 
 const ShopItem = ({ id, userCoins, itemToShop }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -83,12 +83,14 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
     db.collection("users")
       .doc(uid)
       .update({ coins: userCoins - cost });
-    // db.collection("users").doc(uid).update({
-    //   inventory: firebase.firestore.FieldValue.arrayUnion('cherry')
-    // });
+   
+    var inventoryUpdate = {};
+    inventoryUpdate[`inventory2.${item}`] = increment(1);
+
     db.collection("users")
       .doc(uid)
-      .update({ inventory: firebase.firestore.FieldValue.arrayUnion(item) });
+      .update(inventoryUpdate);
+    
   };
 
   useEffect(() => {
@@ -102,8 +104,14 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
           setModalVisible(!modalVisible);
         }}
       >
-        <Image source={img} />
+        <Image source={img}/>
       </TouchableOpacity>
+
+      <View style={styles.costContainer} >
+               <Text className="text-2xl"style={styles.CostText}>
+               • {cost}c
+                </Text>
+      </View>
 
       <Modal
         animationType="fade"
@@ -174,9 +182,8 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
             <View style={styles.modal2View}>
               <Text style={styles.description}>
                 {" "}
-                Ur a Broke Bitch. {"\n"}
-                You only have {<Coins numCoins={userCoins} />} {"\n"}
-                {":("}
+                Not enough coins! {"\n"}
+                You only have {<Coins numCoins={userCoins} />}
               </Text>
               <TouchableOpacity
                 style={styles.downButton}
@@ -246,7 +253,8 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: "center",
     fontFamily: "FredokaMedium",
-    width: 350
+    width: 350,
+    marginTop:160
   },
   modal2View: {
     backgroundColor: "#DAF0F7",
@@ -255,14 +263,35 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: "center",
     fontFamily: "FredokaMedium",
-    width: 300
+    width: 300,
+    marginTop:160
   },
   description: {
     color: "#505050",
     fontFamily: "FredokaMedium",
     textAlign: "center",
     fontSize: 20
-  }
+  },
+  costContainer:{
+    //backgroundColor:"#FFF2D4",
+    backgroundColor: 'rgba(255, 242, 212, .80)',
+    position:"absolute",
+    borderTopLeftRadius:15,
+    borderBottomLeftRadius:15,
+    height:35,
+    width:55,
+    // height:'15%',
+    // width: "60%",
+    alignItems:"center",
+    justifyContent:"center",
+    marginLeft:60,
+  },
+  CostText:{
+    color: "#505050",
+    fontFamily: "FredokaMedium",
+    fontSize:20,
+  },
+
 });
 
 export default ShopItem;
