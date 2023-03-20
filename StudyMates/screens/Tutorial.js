@@ -1,30 +1,38 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import Slider from "../Components/Slider";
+import { AntDesign } from "@expo/vector-icons";
 
-const Tutorial = ({ route, nvagigation }) => {
+const Tutorial = ({ route, navigation }) => {
+  const { img } = route.params;
   return (
-    <LinearGradient
-      className="h-screen w-screen items-center justify-center flex"
-      colors={["#E4E5E3", "#FFB2B2", "#C3C3F0"]}
-      start={{ x: 0, y: 0 }}
-    >
-      <View
-        className="w-9/12 h-1/2 bg-tan items-center justiy-center rounded-xl flex"
-        style={styles.shadowProp}
+    // <LinearGradient
+    //   className="h-screen w-screen"
+    //   colors={["#E4E5E3", "#FFB2B2", "#C3C3F0"]}
+    //   start={{ x: 0, y: 0 }}
+    // >
+    <View style={styles.contain}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Landing", { img: img })}
       >
-        <Text className="font-fredoka text-3xl">stay focused</Text>
-      </View>
-    </LinearGradient>
+        <AntDesign name="close" size={36} style={styles.close} />
+      </TouchableOpacity>
+      <Slider />
+    </View>
+    //<Slider />
+    // </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  shadowProp: {
-    shadowColor: "#00000",
-    shadowOffset: { height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 2
+  contain: {
+    backgroundColor: "#FFF2D4"
+  },
+  close: {
+    textAlign: "right",
+    marginTop: 70,
+    marginRight: 30
   }
 });
 

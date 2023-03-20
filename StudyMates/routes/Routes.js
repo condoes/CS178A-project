@@ -42,11 +42,11 @@ function Routes() {
           component={ConfirmPet}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Tutorial"
           component={Tutorial}
           options={{ headerShown: false }}
-        /> */}
+        />
         <Stack.Screen
           name="Landing"
           component={Landing}
