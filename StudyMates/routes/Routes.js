@@ -13,6 +13,7 @@ import ConfirmPet from "../screens/confirmPet";
 import NamePet from "../screens/namePet";
 import Store from "../screens/Store";
 import Settings from "../screens/settings";
+import Tutorial from "../screens/Tutorial";
 import Analytics from "../screens/Analytics";
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,11 @@ function Routes() {
         <Stack.Screen
           name="ConfirmPet"
           component={ConfirmPet}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Tutorial"
+          component={Tutorial}
           options={{ headerShown: false }}
         />
         <Stack.Screen

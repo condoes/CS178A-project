@@ -27,7 +27,7 @@ const ConfirmPet = ({ route, navigation }) => {
           .update({ petid: petid });
       });
 
-    navigation.navigate("Landing", { img: img });
+    navigation.navigate("Tutorial", { img: img });
   };
 
   //   console.log("image:", img);
