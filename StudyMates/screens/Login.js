@@ -77,6 +77,9 @@ const Login = ({ route, navigation }) => {
         <Pressable onPress={() => navigation.navigate("Register")}>
           <Text className="pt-6 underline text-2xl font-fredoka">sign up</Text>
         </Pressable>
+        <Pressable onPress={() => navigation.navigate("ForgotPassword")}>
+          <Text className="pt-6 underline text-2xl font-fredoka">forgot password</Text>
+        </Pressable>
       </LinearGradient>
     </View>
   );
