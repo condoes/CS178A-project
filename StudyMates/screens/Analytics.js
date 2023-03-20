@@ -60,7 +60,7 @@ const Analytics = ({ route, navigation }) => {
     };
 
     const dataBar = {
-        labels: ["Mun", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
+        labels: ["Mun", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"],
         datasets: [{ data: [20, 45, 28, 80, 99, 43,20] }]
     };
 
