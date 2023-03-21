@@ -29,7 +29,7 @@ const TimerScreen = ({ route, navigation }) => {
       .doc(auth.currentUser.uid)
       .update({
         totalStudy: increment(time),
-        exp: increment(time)
+        // exp: increment(time)
       });
   };
 

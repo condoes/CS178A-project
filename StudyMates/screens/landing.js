@@ -37,12 +37,13 @@ const Landing = ({ route, navigation }) => {
   const [img, setImg] = useState(null);
   const [pet, setPet] = useState(null);
   const [welcome, setWelcome] = useState(true);
+  const [levelUp, setLevelUp] = useState(false);
   const [openInventory, setInventoryVisible] = useState(false);
   const [foodScreen, setFoodScreen] = useState(false);
   const [fruits, setFruits] = useState([]);
   const [currFood, setCurrFood] = useState(null);
   const [currFoodImg, setCurrFoodImg] = useState(null);
-  const [inv, setInv] = useState([]);
+  const [hasFruits, setHasFruits] = useState(0);
 
   const getPet = async petid => {
     const petRef = db.collection("pets").doc(petid);
@@ -61,8 +62,12 @@ const Landing = ({ route, navigation }) => {
 
   useEffect(() => {
     setWelcome(true);
+    // if (levelUp) {
+    //   setLevelUp(true);
+    // }
     setTimeout(() => {
       setWelcome(false);
+      setLevelUp(false)
     }, 5000);
     //console.log(user);
     const { uid } = auth.currentUser;
@@ -79,6 +84,10 @@ const Landing = ({ route, navigation }) => {
         if (pet === null) {
           getPet(doc.data().petid);
         }
+
+        setHasFruits(doc.data().inventory.banana + doc.data().inventory.cherry +
+        doc.data().inventory.hotDog + doc.data().inventory.kiwi + doc.data().inventory.waffles)
+        
         setFruits([
           {key: 'banana', amount: (doc.data().inventory.banana)},
           {key: 'cherry', amount: (doc.data().inventory.cherry)},
@@ -88,26 +97,10 @@ const Landing = ({ route, navigation }) => {
         ]);
       });
 
-    // console.log(user.username);
-
-    // setInv(user.inventory2);
-
-    // setFruitAmount();
-
     return () => {
       userSub;
     };
   }, []);
-
-  function setFruitAmount() {
-    setFruits([
-          {key: 'banana', amount: (user.inventory2 && user.inventory2.banana)},
-          {key: 'cherry', amount: (user.inventory2 && user.inventory2.cherry)},
-          {key: 'hotDog', amount: (user.inventory2 && user.inventory2.hotDog)},
-          {key: 'kiwi', amount: (user.inventory2 && user.inventory2.kiwi)},
-          {key: 'waffles', amount: (user.inventory2 && user.inventory2.waffles)}
-        ]);
-  }
 
     const pan = useRef(new Animated.ValueXY()).current;
 
@@ -151,15 +144,40 @@ const Landing = ({ route, navigation }) => {
     };
 
     const handleFoodDec = () => {
+      var amount = 0;
+
+      currFood === "cherry" ? amount = 15
+        : currFood === "banana" ? amount = 10
+        : currFood === "hotDog" ? amount = 25
+        : currFood === "kiwi" ? amount = 10
+        : amount = 20; 
+      
       const { uid } = auth.currentUser;
-      var inventoryUpdate = {};
-        inventoryUpdate[`inventory.${currFood}`] = increment(-1);
+      // var inventoryUpdate = {};
+      //   inventoryUpdate[`inventory.${currFood}`] = increment(-1);
 
         db.collection("users")
         .doc(uid)
-        .update(inventoryUpdate);
+        .update({
+          [`inventory.${currFood}`]: increment(-1), 
+          exp: increment(amount),
+        });
+
+        // console.log()
 
         setFoodScreen(!foodScreen);
+    }
+
+    const handleLevelUp = () => {
+      const { uid } = auth.currentUser;
+
+      db.collection("users")
+      .doc(uid)
+      .update({
+        level: increment(1),
+        exp: increment(-100)
+      });
+
     }
 
   return (
@@ -176,7 +194,7 @@ const Landing = ({ route, navigation }) => {
           </Text>
 
           <LifeBar
-            percent={(user && user.exp) > 0 ? (user && user.exp) / 100 : 0.1}
+            percent={(user && user.exp) > 5 ? ((user && user.exp) % 100) / 100 : 0.1}
           />
           {/* {console.log("user pet id:", user.totalStudy)} */}
           <Coins numCoins={user && user.coins} />
@@ -189,11 +207,22 @@ const Landing = ({ route, navigation }) => {
 
       <View className="z-[3] flex flex-end justify-start items-center">
         <View>
-          <FadeInOut visible={welcome} duration={2500}>
-            <Text className="text-4xl font-fredoka text-white mb-[20%] text-center">
-              Welcome, {user && user.username}
+          {welcome? 
+            <FadeInOut visible={welcome} duration={2500}>
+              <Text className="text-4xl font-fredoka text-white mb-[20%] text-center">
+                Welcome, {user && user.username}
+              </Text>
+            </FadeInOut>
+          : levelUp?
+          <FadeInOut visible={levelUp} duration={2500}>
+            <Text className="text-4xl font-fredoka text-red mb-[20%] text-center">
+              Level up! 
             </Text>
           </FadeInOut>
+          : <Text className="text-4xl font-fredoka text-red mb-[20%] text-center">
+              {' '}
+            </Text>
+          }
         </View>
 
         <View >
@@ -256,7 +285,11 @@ const Landing = ({ route, navigation }) => {
           </View>
           <View style={styles.inventoryView}>
             <View style={styles.innerInventory}>
-
+              {hasFruits === 0? 
+              <View className="left-[37%] top-[37%]">
+                <Text className="text-2xl font-fredoka text-white">Empty :{'('}</Text>
+              </View>
+              :
                 <FlatList 
                   showsHorizontalScrollIndicator={false}
                   style = {styles.itemList}
@@ -273,6 +306,7 @@ const Landing = ({ route, navigation }) => {
                     </View>
                   }
                 />
+              }
             </View>
           </View>
         </Modal>
