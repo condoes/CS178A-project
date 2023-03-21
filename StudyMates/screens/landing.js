@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,10 @@ import {
   useContext,
   TouchableOpacity,
   Modal,
-  ScrollView
+  ScrollView,
+  Animated,
+  PanResponder,
+  TouchableNativeFeedback
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import BurgerMenu from "../Components/burgerMenu";
@@ -24,7 +27,9 @@ import FadeInOut from "react-native-fade-in-out";
 // import inventory from "../Components/inventory";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import InventoryItem from "../Components/inventoryItem";
-import { getKey } from "@firebase/firestore";
+import { getKey, increment } from "@firebase/firestore";
+import { abs } from "react-native-reanimated";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const Landing = ({ route, navigation }) => {
   const [uid, getUid] = useState(null);
@@ -32,9 +37,13 @@ const Landing = ({ route, navigation }) => {
   const [img, setImg] = useState(null);
   const [pet, setPet] = useState(null);
   const [welcome, setWelcome] = useState(true);
+  const [levelUp, setLevelUp] = useState(false);
   const [openInventory, setInventoryVisible] = useState(false);
+  const [foodScreen, setFoodScreen] = useState(false);
   const [fruits, setFruits] = useState([]);
-  const [inv, setInv] = useState([]);
+  const [currFood, setCurrFood] = useState(null);
+  const [currFoodImg, setCurrFoodImg] = useState(null);
+  const [hasFruits, setHasFruits] = useState(0);
 
   const getPet = async petid => {
     const petRef = db.collection("pets").doc(petid);
@@ -53,8 +62,12 @@ const Landing = ({ route, navigation }) => {
 
   useEffect(() => {
     setWelcome(true);
+    // if (levelUp) {
+    //   setLevelUp(true);
+    // }
     setTimeout(() => {
       setWelcome(false);
+      setLevelUp(false)
     }, 5000);
     //console.log(user);
     const { uid } = auth.currentUser;
@@ -71,35 +84,101 @@ const Landing = ({ route, navigation }) => {
         if (pet === null) {
           getPet(doc.data().petid);
         }
+
+        setHasFruits(doc.data().inventory.banana + doc.data().inventory.cherry +
+        doc.data().inventory.hotDog + doc.data().inventory.kiwi + doc.data().inventory.waffles)
+        
         setFruits([
-          {key: 'banana', amount: (doc.data().inventory2.banana)},
-          {key: 'cherry', amount: (doc.data().inventory2.cherry)},
-          {key: 'hotDog', amount: (doc.data().inventory2.hotDog)},
-          {key: 'kiwi', amount: (doc.data().inventory2.kiwi)},
-          {key: 'waffles', amount: (doc.data().inventory2.waffles)}
+          {key: 'banana', amount: (doc.data().inventory.banana)},
+          {key: 'cherry', amount: (doc.data().inventory.cherry)},
+          {key: 'hotDog', amount: (doc.data().inventory.hotDog)},
+          {key: 'kiwi', amount: (doc.data().inventory.kiwi)},
+          {key: 'waffles', amount: (doc.data().inventory.waffles)}
         ]);
       });
-
-    // console.log(user.username);
-
-    // setInv(user.inventory2);
-
-    // setFruitAmount();
 
     return () => {
       userSub;
     };
   }, []);
 
-  function setFruitAmount() {
-    setFruits([
-          {key: 'banana', amount: (user.inventory2 && user.inventory2.banana)},
-          {key: 'cherry', amount: (user.inventory2 && user.inventory2.cherry)},
-          {key: 'hotDog', amount: (user.inventory2 && user.inventory2.hotDog)},
-          {key: 'kiwi', amount: (user.inventory2 && user.inventory2.kiwi)},
-          {key: 'waffles', amount: (user.inventory2 && user.inventory2.waffles)}
-        ]);
-  }
+    const pan = useRef(new Animated.ValueXY()).current;
+
+    const panResponder = useRef(
+        PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}],
+            {useNativeDriver: false},
+            ),
+        onPanResponderRelease: (e, gesture) => {
+         Animated.spring(
+          pan,{toValue:{x:0,y:0}, useNativeDriver: false}
+          
+          ).start();
+      }
+        }),
+    ).current;
+
+    const handleFoodPress = (item) => {
+      setInventoryVisible(!openInventory);
+      setFoodScreen(!foodScreen);
+      setCurrFood(item);
+
+      switch (item) {
+        case "banana":
+          setCurrFoodImg(require("../assets/food/banana.png"));
+          break;
+        case "cherry":
+          setCurrFoodImg(require("../assets/food/cherry.png"));
+          break;
+        case "kiwi":
+          setCurrFoodImg(require("../assets/food/kiwi.png"));
+          break;
+        case "waffles":
+          setCurrFoodImg(require("../assets/food/waffles.png"));
+          break;
+        case "hotDog":
+          setCurrFoodImg(require("../assets/food/hotDog.png"));
+          break;
+      }
+    };
+
+    const handleFoodDec = () => {
+      var amount = 0;
+
+      currFood === "cherry" ? amount = 15
+        : currFood === "banana" ? amount = 10
+        : currFood === "hotDog" ? amount = 25
+        : currFood === "kiwi" ? amount = 10
+        : amount = 20; 
+      
+      const { uid } = auth.currentUser;
+      // var inventoryUpdate = {};
+      //   inventoryUpdate[`inventory.${currFood}`] = increment(-1);
+
+        db.collection("users")
+        .doc(uid)
+        .update({
+          [`inventory.${currFood}`]: increment(-1), 
+          exp: increment(amount),
+        });
+
+        // console.log()
+
+        setFoodScreen(!foodScreen);
+    }
+
+    const handleLevelUp = () => {
+      const { uid } = auth.currentUser;
+
+      db.collection("users")
+      .doc(uid)
+      .update({
+        level: increment(1),
+        exp: increment(-100)
+      });
+
+    }
 
   return (
     <LinearGradient
@@ -115,7 +194,7 @@ const Landing = ({ route, navigation }) => {
           </Text>
 
           <LifeBar
-            percent={(user && user.exp) > 0 ? (user && user.exp) / 100 : 0.1}
+            percent={(user && user.exp) > 5 ? ((user && user.exp) % 100) / 100 : 0.1}
           />
           {/* {console.log("user pet id:", user.totalStudy)} */}
           <Coins numCoins={user && user.coins} />
@@ -128,19 +207,31 @@ const Landing = ({ route, navigation }) => {
 
       <View className="z-[3] flex flex-end justify-start items-center">
         <View>
-          <FadeInOut visible={welcome} duration={2500}>
-            <Text className="text-4xl font-fredoka text-white mb-[20%] text-center">
-              Welcome, {user && user.username}
+          {welcome? 
+            <FadeInOut visible={welcome} duration={2500}>
+              <Text className="text-4xl font-fredoka text-white mb-[20%] text-center">
+                Welcome, {user && user.username}
+              </Text>
+            </FadeInOut>
+          : levelUp?
+          <FadeInOut visible={levelUp} duration={2500}>
+            <Text className="text-4xl font-fredoka text-red mb-[20%] text-center">
+              Level up! 
             </Text>
           </FadeInOut>
+          : <Text className="text-4xl font-fredoka text-red mb-[20%] text-center">
+              {' '}
+            </Text>
+          }
         </View>
 
-        <View>
+        <View >
           {/* https://reactnative.dev/docs/images */}
           <Image source={img} />
         </View>
       </View>
-
+       
+      {!foodScreen? 
       <View style={styles.buttonRow}>
         <TouchableOpacity
           style={[styles.roundButton, styles.shadowProp]}
@@ -152,9 +243,6 @@ const Landing = ({ route, navigation }) => {
             color="black"
           />
         </TouchableOpacity>
-
-        {/* <GestureHandler style={{flex: 1}}
-          onSwipeDown={ ()=> setInventoryVisible(!openInventory)}>  */}
 
         <Modal
           animationType="slide"
@@ -197,28 +285,31 @@ const Landing = ({ route, navigation }) => {
           </View>
           <View style={styles.inventoryView}>
             <View style={styles.innerInventory}>
-              {/* <ScrollView horizontal={true} > */}
-                <FlatList
-                  style={{paddingRight: 100}}
+              {hasFruits === 0? 
+              <View className="left-[37%] top-[37%]">
+                <Text className="text-2xl font-fredoka text-white">Empty :{'('}</Text>
+              </View>
+              :
+                <FlatList 
+                  showsHorizontalScrollIndicator={false}
+                  style = {styles.itemList}
                   horizontal={true}
                   data={fruits}
-                  renderItem={({item}) => 
-                  // console.log(item.amount)
-                  <InventoryItem amount={item.amount} item={item.key}></InventoryItem>
-                }/>
-                {/* // <Text style={styles.buttonText}>{item.key}</Text> */}
-                {/* DUMMY ITEMS. PUT GABYS COMPONENTS HERE */}
-
-                {/* <InventoryItem amount={10} item="cherry"></InventoryItem>
-                <InventoryItem amount={3} item="banana"></InventoryItem>
-                <InventoryItem amount={10} item="kiwi"></InventoryItem>
-                <InventoryItem amount={3} item="waffles"></InventoryItem>
-                <InventoryItem amount={10} item="hotDog"></InventoryItem> */}
-              {/* </ScrollView> */}
+                  renderItem={({item}) =>
+                  
+                  <View>
+                    <TouchableOpacity onPress={ () => handleFoodPress(item.key)
+                    }>
+                      <InventoryItem amount={item.amount} item={item.key}
+                      ></InventoryItem>
+                    </TouchableOpacity>
+                    </View>
+                  }
+                />
+              }
             </View>
           </View>
         </Modal>
-        {/* </GestureHandler> */}
 
         <TouchableOpacity
           style={[styles.button, styles.shadowProp]}
@@ -239,7 +330,36 @@ const Landing = ({ route, navigation }) => {
             color="black"
           />
         </TouchableOpacity>
-      </View>
+        </View>
+        :
+        <View style = {{zIndex: 3, paddingBottom: '13%'}}>
+          <Animated.View 
+                  scrollEnabled={false}
+                  style={{
+                    transform: [{translateX: pan.x}, {translateY: pan.y}],
+                    position:'relative',
+                  overflow:"visible"
+                }}
+                {...panResponder.panHandlers}>
+          <TouchableOpacity style ={styles.food}
+                    onPress={ () => handleFoodDec()}>
+                  <Image source = {currFoodImg}/>
+                </TouchableOpacity>
+                </Animated.View>
+                <View style = {{marginLeft:165, position: 'absolute'}}>
+                    <TouchableOpacity style = {styles.roundButton}
+                      onPress={ () => setFoodScreen(!foodScreen)}
+                    >
+                      <Entypo
+                      name="cross"
+                      size={32}
+                      color="black"
+                      alignItems="center"
+                      />
+                    </TouchableOpacity>
+                </View>
+        </View>
+      }   
 
       <Image
         className="z-[2] absolute top-[35%] right-[50%] w-[70%] h-[13%]"
@@ -273,7 +393,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 150,
     height: 150,
-    backgroundColor: "red"
+    backgroundColor: "red",
   },
   topRow: {
     alignSelf: "stretch",
@@ -303,7 +423,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     marginBottom: "10%",
-    zIndex: 3
+    zIndex: 3,
   },
   shadowProp: {
     shadowColor: "#00000",
@@ -337,7 +457,7 @@ const styles = StyleSheet.create({
     color: "#4D558A"
   },
   inventoryStyle: {
-    marginTop: "auto"
+    marginTop: "auto",
   },
   inventoryView: {
     backgroundColor: "#9F9FDC",
@@ -345,22 +465,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontFamily: "FredokaMedium",
     height: "25%",
-    width: "100%"
-    //marginTop: 'auto',
-    //overflow: 'visible'
+    width: "100%",
   },
   innerInventory: {
     backgroundColor: "#CBCBF7",
     borderRadius: 20,
-    //alignItems: "center",
-    // justifyContent: "center",
     height: "80%",
-    width: "90%"
+    width: "90%",
   },
-  // scrollView:{
-  //   borderRadius:20,
-  //   width:'100%',
-  // },
   closeButton: {
     backgroundColor: "#9F9FDC",
     borderTopLeftRadius: 10,
@@ -369,7 +481,6 @@ const styles = StyleSheet.create({
     width: "25%",
     marginLeft: 20,
     marginTop: "auto",
-    //marginTop: '100%',
     alignItems: "center",
     justifyContent: "center"
   },
@@ -381,7 +492,6 @@ const styles = StyleSheet.create({
     width: "40%",
     marginLeft: "auto",
     marginRight: 20,
-    //marginTop: 'auto',
     alignItems: "center",
     justifyContent: "flex-end"
   },
@@ -409,7 +519,17 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     height: "100%",
     width: "49%"
-  }
+  },
+  itemList:{
+    paddingRight: 100,
+    //position:"absolute",
+    //overflow:'visible'
+  },
+  food:{
+   //marginTop: '40%', 
+   //backgroundColor : 'black',
+  
+  },
 });
 
 export default Landing;

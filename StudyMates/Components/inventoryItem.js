@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useRef} from "react";
 import {
   View,
   Text,
@@ -6,9 +6,12 @@ import {
   Pressable,
   TouchableOpacity,
   Image,
+  PanResponder,
+  Animated
 } from "react-native";
 import {increment} from "@firebase/firestore";
 import { db, auth } from "../firebase";
+import { ScrollView, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const InventoryItem = (props) => {
     const [amount, setAmount] = useState(props.amount);
@@ -19,7 +22,7 @@ const InventoryItem = (props) => {
         const { uid } = auth.currentUser;
 
         var inventoryUpdate = {};
-        inventoryUpdate[`inventory2.${props.item}`] = increment(-1);
+        inventoryUpdate[`inventory.${props.item}`] = increment(-1);
 
         db.collection("users")
         .doc(uid)
@@ -47,23 +50,24 @@ const InventoryItem = (props) => {
             setDisplay(false);
         }
     };
-
     return (
         <View>
         {display?
+                    
             <View style={styles.container}>
-                <TouchableOpacity style={styles.fruit}
-                onPress={() => {updateUser(); 
-                if(amount == 1) {
-                    setDisplay(false);
-                } else {
-                    decAmount();
-                }
-                }}>
+                <TouchableWithoutFeedback style={styles.fruit}
+            //     onPress={() => {updateUser(); 
+            //         if(amount == 1) {
+            //         setDisplay(false);
+            //     } else {
+            //         decAmount();
+            //     }
+            // }}
+            >
                     {/* {console.log(item)} */}
                     <Image source={item}
                     resizeMode="cover"/>
-                </TouchableOpacity>
+                </TouchableWithoutFeedback>
 
                 {/* <Pressable style={styles.amountContainer}
                 onPress={() => decAmount(amount-1)}> */}
@@ -76,6 +80,21 @@ const InventoryItem = (props) => {
             </View> 
         :null}
         </View>
+
+        // <View>
+        //         <Animated.View 
+        //             scrollEnabled={false}
+        //             style={{
+        //             transform: [{translateX: pan.x}, {translateY: pan.y}],
+        //             position:'relative',
+        //             overflow:"visible"
+        //             }}
+        //             {...panResponder.panHandlers}>
+        //             <TouchableOpacity>
+        //             <Image source={require("../assets/food/waffles.png")}></Image>
+        //             </TouchableOpacity>
+        //         </Animated.View>
+        // </View>
     );
 };
 

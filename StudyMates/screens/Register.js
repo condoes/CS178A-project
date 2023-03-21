@@ -18,7 +18,17 @@ const Register = ({ route, navigation }) => {
           email: email,
           coins: 0,
           totalStudy: 0,
-          petid: ""
+          petid: "",
+          exp: 0,
+          pomoCycles: 0,
+          inventory: {
+            cherry: 0,
+            banana: 0,
+            waffles: 0,
+            hotDog: 0,
+            kiwi: 0,
+          },
+          level: 0,
         };
 
         db.collection("users")

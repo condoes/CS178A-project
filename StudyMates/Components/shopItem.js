@@ -86,7 +86,7 @@ const ShopItem = ({ id, userCoins, itemToShop }) => {
       .update({ coins: userCoins - cost });
       
     var inventoryUpdate = {};
-    inventoryUpdate[`inventory2.${item}`] = increment(1);
+    inventoryUpdate[`inventory.${item}`] = increment(1);
 
     db.collection("users")
       .doc(uid)
